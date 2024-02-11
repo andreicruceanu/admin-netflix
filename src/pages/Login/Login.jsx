@@ -19,14 +19,22 @@ import LoginBg from "../../assets/images/LoginBg.svg";
 import Animate from "../../components/animate/Animate";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { AuthContext } from "../../context/authContext/AuthContext";
-import { login } from "../../context/authContext/apiCalls";
+
+import {
+  loginEnd,
+  loginFailure,
+  loginStart,
+  loginSuccess,
+} from "../../context/authContext/AuthActions";
+import authApi from "../../api/modules/auth.api";
+import { useNavigate } from "react-router-dom";
 
 const RulesPassword = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
 
 const schema = z.object({
-  email: z.string().min(3),
+  username: z.string().min(3),
   password: z
     .string()
     .nonempty("Password is required")
@@ -38,26 +46,58 @@ const schema = z.object({
 
 const Login = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [onRequest, setOnRequest] = useState(false);
   const [loginProgress, setLoginProgress] = useState(0);
+  const [animationLogin, setAnimationLogin] = useState(false);
 
-  const { isFetching, dispatch, error } = useContext(AuthContext);
+  const { isFetching, dispatch, error, twoFAUser } = useContext(AuthContext);
 
-  console.log(error);
+  const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
-    setError,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm({
-    defaultValues: { email: "", password: "" },
+    defaultValues: { username: "", password: "" },
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = ({ ...data }) => {
-    login(data, dispatch);
+  const onSubmit = async (data) => {
+    dispatch(loginStart());
+    const { response, err } = await authApi.login(data);
+    dispatch(loginEnd(response));
+    if (response) {
+      localStorage.setItem("jwt_token", response.token);
+      localStorage.setItem("email", response.email);
+      if (response.twoFactorAuth) {
+        navigate("/auth/two-factor");
+      } else {
+        dispatch(loginSuccess(response));
+        setAnimationLogin(true);
+        const interval = setInterval(() => {
+          setLoginProgress((prev) => prev + 100 / 40);
+        }, 50);
+
+        setTimeout(() => {
+          clearInterval(interval);
+        }, 2000);
+
+        setTimeout(() => {
+          setIsLoggedIn(true);
+        }, 2100);
+
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 2400);
+      }
+    }
+
+    if (err) {
+      dispatch(loginFailure(err.message));
+    }
   };
+
+  console.log(twoFAUser);
 
   return (
     <Box
@@ -68,6 +108,10 @@ const Login = () => {
       {/* background box */}
       <Box
         sx={{
+          display: {
+            xs: "none",
+            md: "block",
+          },
           position: "absolute",
           right: 0,
           height: "100%",
@@ -76,7 +120,7 @@ const Login = () => {
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
           backgroundImage: `url(${LoginBg})`,
-          backgroundColor: "#f5f5f5",
+          backgroundColor: "#f4f4f4",
         }}
       />
       {/* background box */}
@@ -86,12 +130,15 @@ const Login = () => {
         sx={{
           position: "absolute",
           left: "0",
-          height: "100%",
-          width: isLoggedIn
+          minHeight: "100%",
+          minWidth: isLoggedIn
             ? "100%"
             : { xl: "30%", lg: "40%", md: "50%", xs: "100%" },
           transition: "all 1s ease-in-out",
-          bgcolor: colors.common.white,
+          bgcolor: {
+            xs: "#f3f4f4",
+            md: "white",
+          },
         }}
       >
         <Box
@@ -101,6 +148,7 @@ const Login = () => {
             justifyContent: "space-between",
             transition: "all 0.3s ease-in-out",
             height: "100%",
+            opacity: animationLogin ? 0 : 1,
             "::-webkit-scrollbar": { display: "none" },
           }}
         >
@@ -125,7 +173,10 @@ const Login = () => {
               "::-webkit-scrollbar": { display: "none" },
             }}
           >
-            <Animate type="fade" sx={{ maxWidth: 400, width: "100%" }}>
+            <Animate
+              type="fade"
+              sx={{ maxWidth: 400, width: "100%", padding: "0 30px" }}
+            >
               <Box
                 component="form"
                 maxWidth={400}
@@ -134,18 +185,18 @@ const Login = () => {
               >
                 <Stack spacing={3}>
                   <TextField
-                    id="email"
-                    name="email"
-                    label="email"
+                    id="username"
+                    name="username"
+                    label="username"
                     fullWidth
-                    {...register("email")}
+                    {...register("username")}
                   />
-                  {errors.email && (
+                  {errors.username && (
                     <Typography
                       variant="caption"
                       sx={{ color: "red", marginTop: "5px !important" }}
                     >
-                      {errors.email.message}
+                      {errors.username.message}
                     </Typography>
                   )}
                   <TextField
@@ -207,16 +258,16 @@ const Login = () => {
       </Box>
 
       {/* loading box */}
-      {/* {isFetching && (
+      {animationLogin && (
         <Stack
           alignItems="center"
           justifyContent="center"
           sx={{
+            display: "flex",
             height: "100%",
-            width: "100%",
-            position: "absolute",
-            top: 0,
+            width: { xl: "30%", lg: "40%", md: "50%", xs: "100%" },
             left: 0,
+            mb: 6,
             bgcolor: colors.common.white,
             zIndex: 1000,
           }}
@@ -244,7 +295,7 @@ const Login = () => {
             />
           </Box>
         </Stack>
-      )} */}
+      )}
       {/* loading box */}
       {/* Login form */}
     </Box>
