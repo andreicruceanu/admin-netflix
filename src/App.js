@@ -1,20 +1,21 @@
-import Topbar from "./components/topbar/Topbar";
-import { CssBaseline, GlobalStyles } from "@mui/material";
-import Login from "./pages/Login/Login";
-import { BrowserRouter, Route, RouterProvider, Routes } from "react-router-dom";
+import { CssBaseline } from "@mui/material";
+import { RouterProvider } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css";
 import { router } from "./routers";
-import TwoFA from "./pages/Login/TwoFA";
-
+import "../src/components/styles/variables.css";
+import ToastContainerStyled from "./components/common/toast/ToastContainerStyled";
+// import { ColorModeContext, useMode } from "./theme";
 function App() {
+  // const [theme, colorMode] = useMode();
   return (
     <>
+      {/* <ColorModeContext.Provider value={colorMode}>
+        <ThemeProvider theme={theme}> */}
       <CssBaseline />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/auth/two-factor" element={<TwoFA />} />
-        </Routes>
-      </BrowserRouter>
+      <ToastContainerStyled />
+      <RouterProvider router={router} />
+      {/* </ThemeProvider>
+      </ColorModeContext.Provider> */}
     </>
   );
 }
