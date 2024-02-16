@@ -1,14 +1,11 @@
 import {
   Alert,
   Box,
-  Button,
   Checkbox,
   CircularProgress,
   FormControlLabel,
   FormGroup,
-  Link,
   Stack,
-  TextField,
   Typography,
   circularProgressClasses,
   colors,
@@ -16,7 +13,7 @@ import {
 import React, { useContext, useState } from "react";
 import Logo from "../../assets/images/logo.png";
 import LoginBg from "../../assets/images/LoginBg.svg";
-import Animate from "../../components/animate/Animate";
+import Animate from "../../components/common/animate/Animate";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -29,9 +26,12 @@ import {
   loginSuccess,
 } from "../../context/authContext/AuthActions";
 import authApi from "../../api/modules/auth.api";
-import { useNavigate } from "react-router-dom";
-
-const RulesPassword = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+import { Link, useNavigate } from "react-router-dom";
+import ButtonCostum from "../../components/common/Buttons/ButtonCostum";
+import { configsApp } from "../../configs/configsApp";
+import InputCustom from "../../components/common/inputs/InputCustom";
+import ContainerAuth from "../../components/common/container/ContainerAuth";
+import LoadingAnimate from "../../components/common/loading/LoadingAnimate";
 
 const schema = z.object({
   username: z.string().min(3),
@@ -39,7 +39,7 @@ const schema = z.object({
     .string()
     .nonempty("Password is required")
     .regex(
-      RulesPassword,
+      configsApp.rulesPassword,
       "Password must contain at least one uppercase letter, one lowercase letter, one special character"
     ),
 });
@@ -49,7 +49,7 @@ const Login = () => {
   const [loginProgress, setLoginProgress] = useState(0);
   const [animationLogin, setAnimationLogin] = useState(false);
 
-  const { isFetching, dispatch, error, twoFAUser } = useContext(AuthContext);
+  const { isFetching, dispatch, error } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
@@ -97,35 +97,8 @@ const Login = () => {
     }
   };
 
-  console.log(twoFAUser);
-
   return (
-    <Box
-      position="relative"
-      height="100vh"
-      sx={{ "::-webkit-scrollbar": { display: "none" } }}
-    >
-      {/* background box */}
-      <Box
-        sx={{
-          display: {
-            xs: "none",
-            md: "block",
-          },
-          position: "absolute",
-          right: 0,
-          height: "100%",
-          width: "70%",
-          backgroundPosition: "center",
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-          backgroundImage: `url(${LoginBg})`,
-          backgroundColor: "#f4f4f4",
-        }}
-      />
-      {/* background box */}
-
-      {/* Login form */}
+    <ContainerAuth img={LoginBg} widthImg={70}>
       <Box
         sx={{
           position: "absolute",
@@ -184,51 +157,38 @@ const Login = () => {
                 onSubmit={handleSubmit(onSubmit)}
               >
                 <Stack spacing={3}>
-                  <TextField
+                  <InputCustom
+                    type="text"
                     id="username"
                     name="username"
-                    label="username"
-                    fullWidth
-                    {...register("username")}
+                    placeholder="Enter UserName"
+                    label="Username"
+                    register={register}
+                    required
+                    errors={errors}
                   />
-                  {errors.username && (
-                    <Typography
-                      variant="caption"
-                      sx={{ color: "red", marginTop: "5px !important" }}
-                    >
-                      {errors.username.message}
-                    </Typography>
-                  )}
-                  <TextField
-                    {...register("password")}
-                    label="password"
+                  <InputCustom
                     type="password"
-                    name="password"
                     id="password"
-                    fullWidth
+                    name="password"
+                    placeholder="Enter Password"
+                    label="Password"
+                    required
+                    register={register}
+                    errors={errors}
                   />
-                  {errors.password && (
-                    <Typography
-                      variant="caption"
-                      sx={{ color: "red", marginTop: "5px !important" }}
-                    >
-                      {errors.password.message}
-                    </Typography>
-                  )}
-                  <Button
+                  <ButtonCostum
                     type="submit"
                     size="large"
                     variant="contained"
-                    color="success"
                     disabled={isFetching}
+                    loading={isFetching}
                   >
-                    {isFetching ? "Loading..." : "sign in"}
-                  </Button>
+                    {isFetching ? "Loading..." : "Login"}
+                  </ButtonCostum>
                   {error && (
                     <Box sx={{ marginTop: 2 }}>
-                      <Alert severity="error" variant="filled">
-                        {error}
-                      </Alert>
+                      <Alert severity="error">{error}</Alert>
                     </Box>
                   )}
                   <Stack
@@ -238,16 +198,40 @@ const Login = () => {
                   >
                     <FormGroup>
                       <FormControlLabel
-                        control={<Checkbox />}
+                        sx={{
+                          "& .MuiFormControlLabel-label": {
+                            color: "Black",
+                            fontSize: "13px",
+                            fontWeight: 600,
+                          },
+                        }}
+                        control={
+                          <Checkbox
+                            sx={{
+                              color: "Black",
+                              fontWeight: 600,
+                            }}
+                          />
+                        }
                         label="Remember me"
                       />
                     </FormGroup>
-                    <Typography
-                      color="error"
-                      fontWeight="bold"
-                      sx={{ cursor: "pointer" }}
-                    >
-                      <Link to="#">Forgot password?</Link>
+                    <Typography sx={{ cursor: "pointer" }}>
+                      <Typography
+                        component={Link}
+                        to="/auth/recover-password"
+                        sx={{
+                          textDecoration: "none",
+                          color: "Black",
+                          fontSize: "13px",
+                          fontWeight: 600,
+                          "&:hover": {
+                            textDecoration: "underline",
+                          },
+                        }}
+                      >
+                        Forgot password?
+                      </Typography>
                     </Typography>
                   </Stack>
                 </Stack>
@@ -256,49 +240,8 @@ const Login = () => {
           </Box>
         </Box>
       </Box>
-
-      {/* loading box */}
-      {animationLogin && (
-        <Stack
-          alignItems="center"
-          justifyContent="center"
-          sx={{
-            display: "flex",
-            height: "100%",
-            width: { xl: "30%", lg: "40%", md: "50%", xs: "100%" },
-            left: 0,
-            mb: 6,
-            bgcolor: colors.common.white,
-            zIndex: 1000,
-          }}
-        >
-          <Box position="relative">
-            <CircularProgress
-              variant="determinate"
-              sx={{ color: colors.grey[200] }}
-              size={100}
-              value={100}
-            />
-            <CircularProgress
-              variant="determinate"
-              disableShrink
-              value={loginProgress}
-              size={100}
-              sx={{
-                [`& .${circularProgressClasses.circle}`]: {
-                  strokeLinecap: "round",
-                },
-                position: "absolute",
-                left: 0,
-                color: colors.green[600],
-              }}
-            />
-          </Box>
-        </Stack>
-      )}
-      {/* loading box */}
-      {/* Login form */}
-    </Box>
+      {animationLogin && <LoadingAnimate loginProgress={loginProgress} />}
+    </ContainerAuth>
   );
 };
 

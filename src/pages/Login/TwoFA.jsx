@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   CircularProgress,
   Stack,
   TextField,
@@ -20,6 +19,9 @@ import { toast } from "react-toastify";
 import { convertOTPtoNumber, formatSeconds } from "../../utils/functions";
 import { loginSuccess } from "../../context/authContext/AuthActions";
 import { useNavigate } from "react-router-dom";
+import ButtonCostum from "../../components/common/Buttons/ButtonCostum";
+import LoadingAnimate from "../../components/common/loading/LoadingAnimate";
+import ContainerAuth from "../../components/common/container/ContainerAuth";
 
 const TwoFA = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -108,6 +110,7 @@ const TwoFA = () => {
 
     if (response && response.result) {
       dispatch(loginSuccess(twoFAUser));
+      window.scrollTo(0, 0);
       setAnimationLogin(true);
       const interval = setInterval(() => {
         setLoginProgress((prev) => prev + 100 / 40);
@@ -132,32 +135,7 @@ const TwoFA = () => {
   };
 
   return (
-    <Box
-      position="relative"
-      minHeight="100vh"
-      sx={{ "::-webkit-scrollbar": { display: "none" } }}
-    >
-      {/* background box */}
-      <Box
-        sx={{
-          position: "absolute",
-          right: 0,
-          display: {
-            xs: "none",
-            md: "block",
-          },
-          height: "100%",
-          width: "70%",
-          backgroundPosition: "center",
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-          backgroundImage: `url(${LoginBg})`,
-          backgroundColor: "#f5f5f5",
-        }}
-      />
-      {/* background box */}
-
-      {/* Login form */}
+    <ContainerAuth img={LoginBg} widthImg={70}>
       <Box
         sx={{
           position: "absolute",
@@ -267,11 +245,12 @@ const TwoFA = () => {
                     Code is required !
                   </Typography>
                 )}
-                <Button
+                <ButtonCostum
                   type="submit"
                   size="large"
                   variant="contained"
                   disabled={onRequestSendCode}
+                  loading={onRequestSendCode}
                   sx={{
                     borderRadius: "10px",
                     display: "flex",
@@ -281,7 +260,7 @@ const TwoFA = () => {
                   }}
                 >
                   {onRequestSendCode ? "Loading..." : "Login"}
-                </Button>
+                </ButtonCostum>
               </Box>
               <Typography variant="body1" sx={{ textAlign: "center", mt: 2 }}>
                 Didn't receive mail? Send it again in
@@ -293,7 +272,7 @@ const TwoFA = () => {
                   {formatSeconds(secondsLeft)}
                 </Typography>
               </Typography>
-              <Button
+              <ButtonCostum
                 type="submit"
                 size="large"
                 onClick={handleSendEmailAgain}
@@ -305,63 +284,16 @@ const TwoFA = () => {
                   width: "220px",
                   height: "52px",
                   mt: 2,
-                  "&.Mui-disabled": {
-                    opacity: ".6",
-                    color: "white",
-                    background: "#7f99cc",
-                  },
                 }}
               >
                 Send Again
-              </Button>
+              </ButtonCostum>
             </Stack>
           </Box>
-
-          {/* logo */}
         </Box>
       </Box>
-
-      {/* loading box */}
-      {animationLogin && (
-        <Stack
-          alignItems="center"
-          justifyContent="center"
-          sx={{
-            display: "flex",
-            minHeight: "100vh",
-            width: { xl: "30%", lg: "40%", md: "50%", xs: "100%" },
-            left: 0,
-            mb: 6,
-            bgcolor: colors.common.white,
-            zIndex: 1000,
-          }}
-        >
-          <Box position="relative">
-            <CircularProgress
-              variant="determinate"
-              sx={{ color: colors.grey[200] }}
-              size={100}
-              value={100}
-            />
-            <CircularProgress
-              variant="determinate"
-              value={loginProgress}
-              size={100}
-              sx={{
-                [`& .${circularProgressClasses.circle}`]: {
-                  strokeLinecap: "round",
-                },
-                position: "absolute",
-                left: 0,
-                color: colors.green[600],
-              }}
-            />
-          </Box>
-        </Stack>
-      )}
-      {/* loading box */}
-      {/* Login form */}
-    </Box>
+      {animationLogin && <LoadingAnimate loginProgress={loginProgress} />}
+    </ContainerAuth>
   );
 };
 
