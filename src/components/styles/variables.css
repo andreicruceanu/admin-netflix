@@ -1,0 +1,19 @@
+:root {
+  /* COLORS */
+  --color-white: #fff;
+
+  --color-primary: "#039";
+  --color-primary-hover: "#002673";
+  --color-border-hover: "#26";
+
+  --color-btn-primary: "#fff";
+  --color-btn-disabled: "#7f99cc";
+
+  --color-bg-primary: "#f4f4f4";
+
+  /* primary */
+  --btn-bg-color-primary: var(--color-primary);
+  --btn-bg-color-hover-primary: var(--color-primary-hover);
+  --btn-border-hover-primary: var(--color-border-hover);
+  --btn-disabled-primary: var(--color-btn-disabled);
+}

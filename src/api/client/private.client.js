@@ -1,24 +1,29 @@
 import axios from "axios";
-import { configsApp } from "../../configs/configsApp.js";
 import queryString from "query-string";
+import { configsApp } from "../../configs/configsApp.js";
 
-const publicClient = axios.create({
+const privateClient = axios.create({
   baseURL: configsApp.baseURL,
   paramsSerializer: {
     encode: (params) => queryString.stringify(params),
   },
 });
-publicClient.interceptors.request.use(async (config) => {
+
+privateClient.interceptors.request.use(async (config) => {
   return {
     ...config,
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
     },
   };
 });
-publicClient.interceptors.response.use(
+
+privateClient.interceptors.response.use(
   (response) => {
-    if (response && response.data) return response.data;
+    if (response && response.data) {
+      return response.data;
+    }
     return response;
   },
   (err) => {
@@ -26,4 +31,4 @@ publicClient.interceptors.response.use(
   }
 );
 
-export default publicClient;
+export default privateClient;

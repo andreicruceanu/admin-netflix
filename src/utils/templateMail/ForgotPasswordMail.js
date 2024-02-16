@@ -1,0 +1,3 @@
+const forgotPasswordTemplate = (firstName, link ) => {
+    
+}
