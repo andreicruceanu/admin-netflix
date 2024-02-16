@@ -1,4 +1,4 @@
-import { Box, Grid, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import React, { useState } from "react";
 
 import ButtonCostum from "../../components/common/Buttons/ButtonCostum";
@@ -9,11 +9,12 @@ import { z } from "zod";
 import { configsApp } from "../../configs/configsApp";
 import { zodResolver } from "@hookform/resolvers/zod";
 import adminApi from "../../api/modules/admin.api";
-import { toast } from "react-toastify";
+
+import { showToast } from "../../utils/functions";
 
 const schemaCreateUser = z.object({
   firstName: z.string().min(3),
-  lastName: z.string(),
+  lastName: z.string().min(1, "LastName is Required"),
   email: z.string().email("Email is invalid !"),
   username: z.string().min(5),
   password: z
@@ -32,6 +33,7 @@ const CreateAdmin = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({
     defaultValues: {
       firstName: "",
@@ -46,10 +48,18 @@ const CreateAdmin = () => {
 
   const onSubmit = async (data) => {
     setOnRequest(true);
+
+    console.log(data);
     const { response, err } = await adminApi.createAdmin(data);
     setOnRequest(false);
+
+    if (response) {
+      showToast("Succesfuly create admin", "success");
+      reset();
+    }
+
     if (err) {
-      toast.error(err.message);
+      showToast(err.message, "error");
     }
   };
 
@@ -150,6 +160,7 @@ const CreateAdmin = () => {
               type="submit"
               size="large"
               variant="contained"
+              loading={onRequest}
               disabled={onRequest}
               sx={{ width: "250px", padding: "15px 0px", borderRadius: "12px" }}
             >

@@ -1,5 +1,5 @@
 import { Typography, styled } from "@mui/material";
-import "./styles.css";
+
 const InputCustom = ({
   type,
   id,
