@@ -6,7 +6,7 @@ const ToastContainerStyled = () => {
   return (
     <StyeldToastContainer
       position="top-center"
-      autoClose={500000}
+      autoClose={1500}
       hideProgressBar={true}
       closeButton={false}
       newestOnTop={false}
@@ -18,8 +18,13 @@ const ToastContainerStyled = () => {
 };
 
 const StyeldToastContainer = styled(ToastContainer)(({}) => ({
-  "& .Toastify__toast-theme--light": {
-    background: "#039",
+  "& .Toastify__toast--success": {
+    background: "#039 !important",
+    color: "white",
+  },
+
+  "& .Toastify__toast--error": {
+    background: "#bd362f !important",
     color: "white",
   },
   "& .Toastify__toast--success > .Toastify__toast-body > .Toastify__toast-icon":
@@ -33,6 +38,19 @@ const StyeldToastContainer = styled(ToastContainer)(({}) => ({
   },
   "& .Toastify__toast:hover": {
     boxShadow: "0 0 12px #000",
+  },
+  "@media only screen and (max-width:480px)": {
+    "& .Toastify__toast-container": {
+      padding: "30px",
+    },
+    "& .Toastify__toast": {
+      borderRadius: "5px",
+      boxShadow: "0 0 12px #999",
+      width: "300px !important",
+      marginBottom: "10px",
+      top: "15px",
+      left: "80px",
+    },
   },
 }));
 

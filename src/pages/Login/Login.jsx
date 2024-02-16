@@ -32,6 +32,7 @@ import { configsApp } from "../../configs/configsApp";
 import InputCustom from "../../components/common/inputs/InputCustom";
 import ContainerAuth from "../../components/common/container/ContainerAuth";
 import LoadingAnimate from "../../components/common/loading/LoadingAnimate";
+import { showToast } from "../../utils/functions";
 
 const schema = z.object({
   username: z.string().min(3),
@@ -50,6 +51,8 @@ const Login = () => {
   const [animationLogin, setAnimationLogin] = useState(false);
 
   const { isFetching, dispatch, error } = useContext(AuthContext);
+
+  console.log(error);
 
   const navigate = useNavigate();
 
@@ -94,6 +97,7 @@ const Login = () => {
 
     if (err) {
       dispatch(loginFailure(err.message));
+      showToast(err.message, "error");
     }
   };
 

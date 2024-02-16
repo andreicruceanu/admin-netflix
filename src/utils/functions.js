@@ -1,6 +1,6 @@
 import CheckIcon from "@mui/icons-material/Check";
 import { toast } from "react-toastify";
-
+import CancelIcon from "@mui/icons-material/Cancel";
 export const convertOTPtoNumber = (otp) => {
   const concatenatedString = otp.join("");
   const otpNumber = parseInt(concatenatedString);
@@ -18,14 +18,15 @@ export const formatSeconds = (seconds) => {
 };
 export const showToast = (message, type) => {
   switch (type) {
-    case "succes":
+    case "success":
       return toast.success(message, {
         icon: <CheckIcon sx={{ fontSize: "20px", fontWeight: 900 }} />,
       });
     case "error":
-      return <CheckIcon sx={{ fontSize: "20px", fontWeight: 900 }} />;
+      return toast.error(message, {
+        icon: <CancelIcon sx={{ fontSize: "24px", fontWeight: 900 }} />,
+      });
     default:
-      console.log("Tipul de notificare nu este valid");
       return null;
   }
 };
