@@ -12,6 +12,7 @@ const SelectCustom = React.forwardRef(
           onChange={onChange}
           onBlur={onBlur}
           id={id}
+          className={errors && errors[name] && "error"}
         >
           {children}
         </Select>

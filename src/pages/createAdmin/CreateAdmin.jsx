@@ -65,7 +65,7 @@ const CreateAdmin = () => {
 
   return (
     <Box padding={4}>
-      <Typography variant="h3" sx={{ fontWeight: 600, mb: 4 }}>
+      <Typography variant="h4" sx={{ fontWeight: 600, mb: 4 }}>
         Create New Admin
       </Typography>
       <Box

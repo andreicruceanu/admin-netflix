@@ -1,4 +1,4 @@
-import { Typography, styled } from "@mui/material";
+import { Box, Typography, styled } from "@mui/material";
 
 const InputCustom = ({
   type,
@@ -11,16 +11,18 @@ const InputCustom = ({
   errors,
 }) => {
   return (
-    <ContainerInput>
-      <Label htmlFor={id}>{required ? label + " * " : label}</Label>
-      <Input
-        id={id}
-        name={id}
-        className={errors && errors[name] && "error"}
-        type={type}
-        {...register(name, { required })}
-        placeholder={placeholder}
-      />
+    <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
+      <ContainerInput>
+        <Label htmlFor={id}>{required ? label + " * " : label}</Label>
+        <Input
+          id={id}
+          name={id}
+          className={errors && errors[name] && "error"}
+          type={type}
+          {...register(name, { required })}
+          placeholder={placeholder}
+        />
+      </ContainerInput>
       {errors && errors[name] && (
         <Typography
           variant="caption"
@@ -29,7 +31,7 @@ const InputCustom = ({
           {errors[name].message}
         </Typography>
       )}
-    </ContainerInput>
+    </Box>
   );
 };
 
@@ -43,6 +45,7 @@ const Label = styled("label")(({}) => ({
   marginBottom: "5px",
   fontSize: "12px",
   fontWeight: 600,
+  display: "inline-block",
 }));
 
 const Input = styled("input")(({}) => ({
