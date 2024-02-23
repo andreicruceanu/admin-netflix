@@ -1,49 +1,56 @@
-import React from "react";
-import styled from "@emotion/styled";
-import { Typography } from "@mui/material";
-const SelectCustom = React.forwardRef(
-  (
-    { id, label, required, children, name, onChange, onBlur, errors, width },
-    ref
-  ) => {
-    return (
+import { Box, Typography, styled } from "@mui/material";
+
+const TextareaCostum = ({
+  type,
+  id,
+  register,
+  placeholder,
+  label,
+  name,
+  required,
+  errors,
+}) => {
+  return (
+    <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
       <ContainerInput>
         <Label htmlFor={id}>{required ? label + " * " : label}</Label>
-        <Select
-          name={name}
-          width={width}
-          ref={ref}
-          onChange={onChange}
-          onBlur={onBlur}
+        <TextArea
           id={id}
+          name={id}
+          cols={5}
+          rows={5}
           className={errors && errors[name] && "error"}
-        >
-          {children}
-        </Select>
-        {errors && errors[name] && (
-          <Typography
-            variant="caption"
-            sx={{ color: "red", marginTop: "5px !important" }}
-          >
-            {errors[name].message}
-          </Typography>
-        )}
+          type={type}
+          {...register(name, { required })}
+          placeholder={placeholder}
+        />
       </ContainerInput>
-    );
-  }
-);
+      {errors && errors[name] && (
+        <Typography
+          variant="caption"
+          sx={{ color: "red", marginTop: "5px !important" }}
+        >
+          {errors[name].message}
+        </Typography>
+      )}
+    </Box>
+  );
+};
+
 const ContainerInput = styled("div")(({}) => ({
   display: "flex",
   flexDirection: "column",
   width: "100%",
 }));
+
 const Label = styled("label")(({}) => ({
   marginBottom: "5px",
   fontSize: "12px",
   fontWeight: 600,
+  display: "inline-block",
 }));
 
-const Select = styled("select")(({ width }) => ({
+const TextArea = styled("textarea")(({}) => ({
   background: "#f5f6fa",
   border: "1px solid #d5d5d5",
   borderRadius: "4px",
@@ -51,8 +58,8 @@ const Select = styled("select")(({ width }) => ({
   lineHeight: "19px",
   color: "#595959",
   padding: "13px 15px",
+  resize: "none",
   outline: "none",
-  width: width || "100%",
   "&.error": {
     border: "1px solid #e54949",
   },
@@ -74,4 +81,4 @@ const Select = styled("select")(({ width }) => ({
   },
 }));
 
-export default SelectCustom;
+export default TextareaCostum;
