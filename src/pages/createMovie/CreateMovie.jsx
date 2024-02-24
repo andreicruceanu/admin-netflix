@@ -2,6 +2,7 @@ import { Box, Step, StepLabel, Stepper } from "@mui/material";
 import ContainerContent from "../../components/common/container/ContainerContent";
 import FormCreateMovie from "./FormCreateMovie";
 import { useState } from "react";
+import FormImages from "./FormImages";
 
 const CreateMovie = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -19,9 +20,9 @@ const CreateMovie = () => {
   function getStepContent(step) {
     switch (step) {
       case 0:
-        return <FormCreateMovie handleNext={handleNext} />;
+        return <FormImages />;
       case 1:
-        return <FormCreateMovie />;
+        return <FormCreateMovie handleNext={handleNext} />;
       case 2:
         return <FormCreateMovie />;
       default:

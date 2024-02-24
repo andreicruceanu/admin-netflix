@@ -10,7 +10,6 @@ import apiCreateMovie from "../../api/modules/createMovie";
 import { showToast } from "../../utils/functions";
 import MultiSelectCustum from "../../components/common/inputs/MultiSelectCustom";
 import ButtonCostum from "../../components/common/Buttons/ButtonCostum";
-import adminApi from "../../api/modules/admin.api";
 
 const FormCreateMovie = ({ handleNext }) => {
   const [movieStatus, setMovieStatus] = useState([]);
@@ -72,8 +71,6 @@ const FormCreateMovie = ({ handleNext }) => {
     },
     resolver: zodResolver(schemaCreateMovie),
   });
-
-  console.log(errors);
 
   useEffect(() => {
     const getMovieStatus = async () => {
