@@ -16,7 +16,11 @@ import authApi from "../../api/modules/auth.api";
 import { configsApp } from "../../configs/configsApp";
 import useCountdown from "../../hooks/useCountnown";
 import { toast } from "react-toastify";
-import { convertOTPtoNumber, formatSeconds } from "../../utils/functions";
+import {
+  convertOTPtoNumber,
+  formatSeconds,
+  showToast,
+} from "../../utils/functions";
 import { loginSuccess } from "../../context/authContext/AuthActions";
 import { useNavigate } from "react-router-dom";
 import ButtonCostum from "../../components/common/Buttons/ButtonCostum";
@@ -47,13 +51,14 @@ const TwoFA = () => {
         email,
       });
       if (response) {
-        toast.success(
-          `We've sent you a verification code to your email address.(${email})`
+        showToast(
+          "We've sent you a verification code to your email address",
+          "success"
         );
         start(configsApp.remainingSecondsToSendEmail);
       }
       if (err) {
-        toast.error(err.message);
+        showToast(err.message, "error");
       }
     };
 
@@ -82,14 +87,15 @@ const TwoFA = () => {
       email,
     });
     if (response) {
-      toast.success(
-        `We've sent you a verification code to your email address.(${email})`
+      showToast(
+        "We've sent you a verification code to your email address",
+        "success"
       );
       start(configsApp.remainingSecondsToSendEmail);
       setIsButtonEnabled(() => !isButtonEnabled);
     }
     if (err) {
-      toast.error(err.message);
+      showToast(err.message, "error");
     }
   };
 
@@ -130,7 +136,7 @@ const TwoFA = () => {
     }
 
     if (err) {
-      toast.error(err.message);
+      showToast(err.message, "error");
     }
   };
 
@@ -185,8 +191,8 @@ const TwoFA = () => {
                 Two-factor authentication
               </Typography>
               <Typography variant="body2" sx={{ textAlign: "center" }}>
-                We sent you a 6 digit code, check your email, copy the number
-                and paste it below.
+                {`We sent you a 6 digit code, check your email, copy the number
+                and paste it below. ${email}`}
               </Typography>
               <Box
                 component="form"

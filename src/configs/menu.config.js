@@ -47,4 +47,11 @@ export const mainMenu = [
     state: "createAdmin",
     isDevider: false,
   },
+  {
+    name: "Create Movie",
+    path: "create-movie",
+    icon: <ContactsOutlinedIcon />,
+    state: "createMovie",
+    isDevider: false,
+  },
 ];

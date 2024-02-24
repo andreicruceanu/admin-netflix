@@ -11,7 +11,6 @@ import CheckEmail from "../../assets/images/check-email.svg";
 import useCountdown from "../../hooks/useCountnown";
 import { formatSeconds, showToast } from "../../utils/functions";
 import authApi from "../../api/modules/auth.api";
-import { toast } from "react-toastify";
 import { configsApp } from "../../configs/configsApp";
 import ContainerAuth from "../../components/common/container/ContainerAuth";
 
@@ -45,12 +44,11 @@ const ForgotPassword = () => {
     if (response) {
       start(configsApp.remainingSecondsToSendEmail);
       setIsMailSent(true);
-      showToast("Email successfully sent to you.", "succes");
+      showToast("Email successfully sent to you.", "success");
     }
 
     if (err) {
-      console.log(err);
-      toast.error(err.message);
+      showToast(err.message, "error");
     }
   };
 
@@ -65,12 +63,12 @@ const ForgotPassword = () => {
     const { response, err } = await authApi.recoverPassword(email);
     setOnRequest(false);
     if (response) {
-      showToast("Email successfully sent to you.", "succes");
+      showToast("Email successfully sent to you.", "success");
       start(configsApp.remainingSecondsToSendEmail);
       setIsButtonEnabled(() => !isButtonEnabled);
     }
     if (err) {
-      toast.error(err.message);
+      showToast(err.message, "error");
     }
   };
 
@@ -170,7 +168,7 @@ const ForgotPassword = () => {
                 width="100% "
                 onSubmit={handleSubmit(onSubmit)}
               >
-                <Stack spacing={3}>
+                <Stack spacing={3} sx={{ padding: { xs: "0 20px", md: 0 } }}>
                   <Box sx={{ mb: "10px !important" }}>
                     <Typography variant="h5" sx={{ fontWeight: 700 }}>
                       Forgot password?

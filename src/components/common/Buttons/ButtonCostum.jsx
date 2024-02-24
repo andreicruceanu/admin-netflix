@@ -39,7 +39,6 @@ const ButtonCostum = ({
       size={size}
       onClick={onClick}
       {...others}
-      loading={loading}
       sx={{ ...sx }}
     >
       {loading && (

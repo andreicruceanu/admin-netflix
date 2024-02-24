@@ -1,6 +1,6 @@
 import { Box, Typography, styled } from "@mui/material";
 
-const InputCustom = ({
+const TextareaCostum = ({
   type,
   id,
   register,
@@ -14,9 +14,11 @@ const InputCustom = ({
     <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
       <ContainerInput>
         <Label htmlFor={id}>{required ? label + " * " : label}</Label>
-        <Input
+        <TextArea
           id={id}
           name={id}
+          cols={5}
+          rows={5}
           className={errors && errors[name] && "error"}
           type={type}
           {...register(name, { required })}
@@ -48,7 +50,7 @@ const Label = styled("label")(({}) => ({
   display: "inline-block",
 }));
 
-const Input = styled("input")(({}) => ({
+const TextArea = styled("textarea")(({}) => ({
   background: "#f5f6fa",
   border: "1px solid #d5d5d5",
   borderRadius: "4px",
@@ -56,6 +58,7 @@ const Input = styled("input")(({}) => ({
   lineHeight: "19px",
   color: "#595959",
   padding: "13px 15px",
+  resize: "none",
   outline: "none",
   "&.error": {
     border: "1px solid #e54949",
@@ -78,4 +81,4 @@ const Input = styled("input")(({}) => ({
   },
 }));
 
-export default InputCustom;
+export default TextareaCostum;

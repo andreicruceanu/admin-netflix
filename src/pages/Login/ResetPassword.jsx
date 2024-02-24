@@ -11,8 +11,8 @@ import { z } from "zod";
 import { configsApp } from "../../configs/configsApp";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import authApi from "../../api/modules/auth.api";
-import { toast } from "react-toastify";
 import ContainerAuth from "../../components/common/container/ContainerAuth";
+import { showToast } from "../../utils/functions";
 
 const schema = z
   .object({
@@ -60,12 +60,11 @@ const ResetPassword = () => {
     setOnRequest(false);
 
     if (response && response.result) {
-      toast.success("Parola a fost schimbata");
+      showToast("Password changed successfully", "success");
     }
 
     if (err) {
-      console.log(err);
-      toast.error(err.message);
+      showToast(err.message, "error");
     }
   };
 
