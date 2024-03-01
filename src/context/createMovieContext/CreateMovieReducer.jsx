@@ -9,7 +9,7 @@ const CreateMovieReducer = (state, action) => {
     case "DELETE_MOVIE_SUCCESS":
       return {
         movieData: null,
-        movieStatus: "",
+        movieStatus: null,
         activeStep: 0,
       };
     case "LOGIN_END":

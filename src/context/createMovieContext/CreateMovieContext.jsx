@@ -3,7 +3,7 @@ import CreateMovieReducer from "./CreateMovieReducer";
 
 const INITIAL_STATE = {
   movieData: JSON.parse(localStorage.getItem("movieData")) || null,
-  movieStatus: JSON.parse(localStorage.getItem("movieStatus")) || "",
+  movieStatus: JSON.parse(localStorage.getItem("movieStatus")) || null,
   activeStep: JSON.parse(localStorage.getItem("activeStep")) || 0,
 };
 
@@ -18,7 +18,7 @@ export const CreateMovieContextProvider = ({ children }) => {
     localStorage.setItem("activeStep", JSON.stringify(state.activeStep));
     localStorage.setItem(
       "movieStatus",
-      JSON.stringify(state.movieData?.state_movie)
+      JSON.stringify(state?.movieData?.state_movie)
     );
   }, [state.movieData, state.activeStep, state.movieData?.state_movie]);
 

@@ -15,7 +15,6 @@ const FormImages = () => {
   const MAX_FILE_SIZE = 5000000;
   function checkFileType(file) {
     if (file?.name) {
-      console.log(file);
       const fileType = file.name.split(".").pop();
       if (fileType === "png" || fileType === "jpg" || fileType === "jpeg")
         return true;
@@ -43,6 +42,8 @@ const FormImages = () => {
   });
 
   const { dispatch, movieData, movieStatus } = useContext(CreateMovieContext);
+
+  const [onRequest, setOnRequest] = useState(false);
 
   const [confirmDialog, setConfirmDialog] = useState({
     isOpen: false,
@@ -75,9 +76,13 @@ const FormImages = () => {
 
   const onSubmit = async (data) => {
     console.log(data);
+    setOnRequest(true);
+    const { response, err } = await apiCreateMovie.uploadImages(data);
+    setOnRequest(false);
+
+    console.log(response, err);
   };
 
-  console.log(errors);
   return (
     <Box component="form" minWidth="750px" onSubmit={handleSubmit(onSubmit)}>
       <Typography
@@ -135,9 +140,11 @@ const FormImages = () => {
           type="submit"
           size="large"
           variant="contained"
+          loading={onRequest}
+          disabled={onRequest}
           sx={{ width: "250px", padding: "15px 0px", borderRadius: "12px" }}
         >
-          Save
+          {onRequest ? "Loading..." : "Save"}
         </ButtonCostum>
       </Stack>
       <ButtonCostum
