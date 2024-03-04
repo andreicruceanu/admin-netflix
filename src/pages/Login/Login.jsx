@@ -52,8 +52,6 @@ const Login = () => {
 
   const { isFetching, dispatch, error } = useContext(AuthContext);
 
-  console.log(error);
-
   const navigate = useNavigate();
 
   const {

@@ -1,32 +1,25 @@
 import { Box, Step, StepLabel, Stepper } from "@mui/material";
 import ContainerContent from "../../components/common/container/ContainerContent";
 import FormCreateMovie from "./FormCreateMovie";
-import { useState } from "react";
+import { useContext } from "react";
 import FormImages from "./FormImages";
+import { CreateMovieContext } from "../../context/createMovieContext/CreateMovieContext";
 
 const CreateMovie = () => {
-  const [activeStep, setActiveStep] = useState(0);
+  const { step, activeStep, movieData } = useContext(CreateMovieContext);
 
-  const step = ["Primary Facts", "Images", "videos"];
+  console.log(step, activeStep, movieData);
 
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  };
-
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  function getStepContent(step) {
-    switch (step) {
+  function getStepContent(activeStep) {
+    switch (activeStep) {
       case 0:
-        return <FormImages />;
+        return <FormCreateMovie />;
       case 1:
-        return <FormCreateMovie handleNext={handleNext} />;
+        return <FormImages />;
       case 2:
         return <FormCreateMovie />;
       default:
-        return "unknown step";
+        return "";
     }
   }
 
@@ -38,11 +31,12 @@ const CreateMovie = () => {
           alternativeLabel
           sx={{ m: "20px 0 50px" }}
         >
-          {step.map((label, index) => (
-            <Step key={index}>
-              <StepLabel>{label}</StepLabel>
-            </Step>
-          ))}
+          {step &&
+            step.map((label, index) => (
+              <Step key={index}>
+                <StepLabel>{label}</StepLabel>
+              </Step>
+            ))}
         </Stepper>
         {getStepContent(activeStep)}
       </Box>

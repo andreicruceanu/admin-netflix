@@ -1,5 +1,5 @@
 import { Box, Stack } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import InputCustom from "../../components/common/inputs/InputCustom";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -10,11 +10,15 @@ import apiCreateMovie from "../../api/modules/createMovie";
 import { showToast } from "../../utils/functions";
 import MultiSelectCustum from "../../components/common/inputs/MultiSelectCustom";
 import ButtonCostum from "../../components/common/Buttons/ButtonCostum";
+import { CreateMovieContext } from "../../context/createMovieContext/CreateMovieContext";
+import { createMoviePrimaryFacts } from "../../context/createMovieContext/CreateMovieAction";
 
-const FormCreateMovie = ({ handleNext }) => {
+const FormCreateMovie = () => {
   const [movieStatus, setMovieStatus] = useState([]);
   const [movieGenres, setMovieGenres] = useState([]);
   const [onRequest, setOnRequest] = useState(false);
+
+  const { dispatch } = useContext(CreateMovieContext);
 
   const schemaCreateMovie = z.object({
     title: z.string().min(1, "Title is required").min(3),
@@ -93,8 +97,8 @@ const FormCreateMovie = ({ handleNext }) => {
     setOnRequest(false);
 
     if (response) {
+      dispatch(createMoviePrimaryFacts(response));
       showToast("Saved succesffuly", "success");
-      handleNext();
     }
 
     if (err) {

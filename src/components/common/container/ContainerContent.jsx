@@ -16,6 +16,7 @@ const ContainerContent = ({ title, children }) => {
           borderRadius: "14px",
           display: "flex",
           alignItems: "center",
+          position: "relative",
           justifyContent: "center",
         }}
       >
