@@ -10,10 +10,13 @@ const privateClient = axios.create({
 });
 
 privateClient.interceptors.request.use(async (config) => {
+  console.log(config);
+
   return {
     ...config,
     headers: {
       "Content-Type": "application/json",
+      ...config.headers,
       Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
     },
   };

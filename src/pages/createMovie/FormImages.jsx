@@ -75,12 +75,10 @@ const FormImages = () => {
   } = useForm({ resolver: zodResolver(fileSchema) });
 
   const onSubmit = async (data) => {
-    console.log(data);
+    data.mediaId = movieData.id;
     setOnRequest(true);
     const { response, err } = await apiCreateMovie.uploadImages(data);
     setOnRequest(false);
-
-    console.log(response, err);
   };
 
   return (

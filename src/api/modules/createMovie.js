@@ -1,4 +1,3 @@
-import { Form } from "react-hook-form";
 import privateClient from "../client/private.client";
 import publicClient from "../client/public.client";
 
@@ -39,15 +38,20 @@ const apiCreateMovie = {
       return { err };
     }
   },
-  uploadImages: async ({ poster, backdrop }) => {
+  uploadImages: async ({ poster, backdrop, mediaId }) => {
     try {
+      console.log(poster[0], backdrop[0]);
       const formData = new FormData();
-      formData.append("poster", poster);
-      formData.append("backdrop", backdrop);
+      formData.append("poster", poster[0]);
+      formData.append("backdrop", backdrop[0]);
+      formData.append("mediaId", mediaId);
 
       const response = await privateClient.put(
         createMovieEndpoints.uploadImages,
-        formData
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
       );
       return { response };
     } catch (err) {
