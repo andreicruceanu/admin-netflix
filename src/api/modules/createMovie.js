@@ -4,6 +4,7 @@ import publicClient from "../client/public.client";
 const createMovieEndpoints = {
   getInfo: "/admin/createMovie/info",
   primaryFacts: "/admin/createMovie",
+  addVideoMovie: "admin/createMovie/addVideo",
   uploadImages: "/admin/createMovie/uploadImages",
   deleteMovies: (movieId) => `/admin/createmovie/${movieId}`,
 };
@@ -52,6 +53,17 @@ const apiCreateMovie = {
         {
           headers: { "Content-Type": "multipart/form-data" },
         }
+      );
+      return { response };
+    } catch (err) {
+      return { err };
+    }
+  },
+  addVideoMovie: async ({ ...data }) => {
+    try {
+      const response = await privateClient.put(
+        createMovieEndpoints.addVideoMovie,
+        { ...data }
       );
       return { response };
     } catch (err) {

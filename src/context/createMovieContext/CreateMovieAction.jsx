@@ -6,3 +6,8 @@ export const createMoviePrimaryFacts = (dataMovie) => ({
 export const deleteMovie = () => ({
   type: "DELETE_MOVIE_SUCCESS",
 });
+
+export const saveImagesMovie = (dataMovie) => ({
+  type: "SAVE_IMAGES_SUCCESS",
+  payload: dataMovie,
+});

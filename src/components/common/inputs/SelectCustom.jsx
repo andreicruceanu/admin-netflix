@@ -3,7 +3,18 @@ import styled from "@emotion/styled";
 import { Typography } from "@mui/material";
 const SelectCustom = React.forwardRef(
   (
-    { id, label, required, children, name, onChange, onBlur, errors, width },
+    {
+      id,
+      label,
+      required,
+      children,
+      name,
+      onChange,
+      onBlur,
+      errors,
+      width,
+      ...rest
+    },
     ref
   ) => {
     return (
@@ -17,6 +28,7 @@ const SelectCustom = React.forwardRef(
           onBlur={onBlur}
           id={id}
           className={errors && errors[name] && "error"}
+          {...rest}
         >
           {children}
         </Select>
