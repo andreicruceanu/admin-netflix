@@ -23,7 +23,13 @@ const CreateMovieReducer = (state, action) => {
       return {
         movieData: action.payload,
         movieStatus: action.payload.state_movie,
-        activeStep: state.activeStep,
+        activeStep: state.activeStep + 1,
+      };
+    case "CREATE_ANOTHER_MOVIE":
+      return {
+        movieData: null,
+        movieStatus: null,
+        activeStep: 0,
       };
     default:
       return {

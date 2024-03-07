@@ -41,7 +41,6 @@ const apiCreateMovie = {
   },
   uploadImages: async ({ poster, backdrop, mediaId }) => {
     try {
-      console.log(poster[0], backdrop[0]);
       const formData = new FormData();
       formData.append("poster", poster[0]);
       formData.append("backdrop", backdrop[0]);

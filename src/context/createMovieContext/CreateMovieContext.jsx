@@ -11,14 +11,14 @@ export const CreateMovieContext = createContext(INITIAL_STATE);
 
 export const CreateMovieContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(CreateMovieReducer, INITIAL_STATE);
-  const step = ["Primary Facts", "Images", "videos"];
+  const step = ["Primary Facts", "Images", "Videos", "Completed"];
 
   useEffect(() => {
     localStorage.setItem("movieData", JSON.stringify(state.movieData));
     localStorage.setItem("activeStep", JSON.stringify(state.activeStep));
     localStorage.setItem(
       "movieStatus",
-      JSON.stringify(state?.movieData?.state_movie)
+      JSON.stringify(state?.movieData ? state.movieData?.state_movie : null)
     );
   }, [state.movieData, state.activeStep, state.movieData?.state_movie]);
 

@@ -5,6 +5,7 @@ import { useContext } from "react";
 import FormImages from "./FormImages";
 import { CreateMovieContext } from "../../context/createMovieContext/CreateMovieContext";
 import FormVideo from "./FormVideo";
+import CompletedCreateMovie from "./CompletedCreateMovie";
 
 const CreateMovie = () => {
   const { step, activeStep } = useContext(CreateMovieContext);
@@ -17,6 +18,8 @@ const CreateMovie = () => {
         return <FormImages />;
       case 2:
         return <FormVideo />;
+      case 3:
+        return <CompletedCreateMovie />;
       default:
         return "";
     }

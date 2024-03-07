@@ -4,14 +4,16 @@ import { Box, Stack, Typography } from "@mui/material";
 import ButtonCostum from "../../components/common/Buttons/ButtonCostum";
 import apiCreateMovie from "../../api/modules/createMovie";
 import { showToast } from "../../utils/functions";
-import { deleteMovie } from "../../context/createMovieContext/CreateMovieAction";
+import {
+  deleteMovie,
+  saveVideoMovie,
+} from "../../context/createMovieContext/CreateMovieAction";
 import ConfirmDialog from "../../components/common/dialogConfirmation/DialogConfirmation";
 import SelectCustom from "../../components/common/inputs/SelectCustom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import InputCustom from "../../components/common/inputs/InputCustom";
-import { configsApp } from "../../configs/configsApp";
 
 const FormVideo = () => {
   const { dispatch, movieData, movieStatus } = useContext(CreateMovieContext);
@@ -67,12 +69,12 @@ const FormVideo = () => {
     const { response, err } = await apiCreateMovie.addVideoMovie(data);
     setOnRequest(false);
     if (response) {
-      //   dispatch(createMoviePrimaryFacts(response));
-      //   showToast("Saved succesffuly", "success");
+      dispatch(saveVideoMovie(response));
+      showToast("Saved succesffuly", "success");
     }
-    // if (err) {
-    //   showToast(err.message, "error");
-    // }
+    if (err) {
+      showToast(err.message, "error");
+    }
   };
 
   return (
@@ -84,11 +86,7 @@ const FormVideo = () => {
         Add a Video
       </Typography>
       <Box display="flex" alignItems="center" justifyContent="center" mb={3}>
-        <img
-          src={configsApp.imagesPoster(movieData?.poster_path)}
-          alt={movieData.title}
-          width="300px"
-        />
+        <img src={movieData?.poster_path} alt={movieData.title} width="300px" />
       </Box>
 
       <Stack
@@ -164,10 +162,11 @@ const FormVideo = () => {
           type="submit"
           size="large"
           variant="contained"
-          disabled={false}
+          loading={onRequest}
+          disabled={onRequest}
           sx={{ width: "250px", padding: "15px 0px", borderRadius: "12px" }}
         >
-          {false ? "Loading..." : "Save"}
+          {onRequest ? "Loading..." : "Save"}
         </ButtonCostum>
       </Stack>
       <ButtonCostum

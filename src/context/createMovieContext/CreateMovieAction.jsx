@@ -11,3 +11,12 @@ export const saveImagesMovie = (dataMovie) => ({
   type: "SAVE_IMAGES_SUCCESS",
   payload: dataMovie,
 });
+
+export const saveVideoMovie = (dataMovie) => ({
+  type: "SAVE_IMAGES_SUCCESS",
+  payload: dataMovie,
+});
+
+export const createAnotherMovie = () => ({
+  type: "CREATE_ANOTHER_MOVIE",
+});
