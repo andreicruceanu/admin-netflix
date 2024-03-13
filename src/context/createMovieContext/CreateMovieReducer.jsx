@@ -1,4 +1,5 @@
 const CreateMovieReducer = (state, action) => {
+  console.log(action);
   switch (action.type) {
     case "CREATE_MOVIE_PRIMARY_FACTS_SUCCESS":
       return {
@@ -12,18 +13,23 @@ const CreateMovieReducer = (state, action) => {
         movieStatus: null,
         activeStep: 0,
       };
-    case "LOGIN_END":
+    case "SAVE_IMAGES_SUCCESS":
       return {
-        isFetching: false,
-        twoFAUser: action.payload,
-        error: false,
-        user: null,
+        movieData: action.payload,
+        movieStatus: action.payload.state_movie,
+        activeStep: state.activeStep + 1,
       };
-    case "LOGIN_FAILURE":
+    case "SAVE_VIDEO_SUCCESS":
       return {
-        user: null,
-        isFetching: false,
-        error: action.payload,
+        movieData: action.payload,
+        movieStatus: action.payload.state_movie,
+        activeStep: state.activeStep + 1,
+      };
+    case "CREATE_ANOTHER_MOVIE":
+      return {
+        movieData: null,
+        movieStatus: null,
+        activeStep: 0,
       };
     default:
       return {

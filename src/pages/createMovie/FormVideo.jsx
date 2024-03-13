@@ -1,58 +1,51 @@
-import { Box, Stack, TextField, Typography } from "@mui/material";
 import React, { useContext, useState } from "react";
-import FileInput from "../../components/common/inputs/FileInput";
-import ButtonCostum from "../../components/common/Buttons/ButtonCostum";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { CreateMovieContext } from "../../context/createMovieContext/CreateMovieContext";
-import ConfirmDialog from "../../components/common/dialogConfirmation/DialogConfirmation";
+import { Box, Stack, Typography } from "@mui/material";
+import ButtonCostum from "../../components/common/Buttons/ButtonCostum";
 import apiCreateMovie from "../../api/modules/createMovie";
 import { showToast } from "../../utils/functions";
 import {
   deleteMovie,
-  saveImagesMovie,
+  saveVideoMovie,
 } from "../../context/createMovieContext/CreateMovieAction";
+import ConfirmDialog from "../../components/common/dialogConfirmation/DialogConfirmation";
+import SelectCustom from "../../components/common/inputs/SelectCustom";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import InputCustom from "../../components/common/inputs/InputCustom";
 
-const FormImages = () => {
-  const MAX_FILE_SIZE = 5000000;
-  function checkFileType(file) {
-    if (file?.name) {
-      const fileType = file.name.split(".").pop();
-      if (fileType === "png" || fileType === "jpg" || fileType === "jpeg")
-        return true;
-    }
-    return false;
-  }
-
-  const fileSchema = z.object({
-    poster: z
-      .any()
-      .refine((file) => file?.length !== 0, "File is required")
-      .refine((file) => file[0]?.size < MAX_FILE_SIZE, "Max size is 5MB.")
-      .refine(
-        (file) => checkFileType(file[0]),
-        "Only .png, .jpg .jpeg formats are supported."
-      ),
-    backdrop: z
-      .any()
-      .refine((file) => file?.length !== 0, "File is required")
-      .refine((file) => file[0]?.size < MAX_FILE_SIZE, "Max size is 5MB.")
-      .refine(
-        (file) => checkFileType(file[0]),
-        "Only .png, .jpg .jpeg formats are supported."
-      ),
-  });
-
+const FormVideo = () => {
   const { dispatch, movieData, movieStatus } = useContext(CreateMovieContext);
 
-  const [onRequest, setOnRequest] = useState(false);
+  console.log(movieData);
+
+  const schemaAddVideo = z.object({
+    key: z.string().min(1, "Source Key is required"),
+    siteMovie: z.string(),
+    typeVideo: z.string(),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      siteMovie: "Youtube",
+      typeVideo: "Official Trailer",
+      key: "",
+    },
+    resolver: zodResolver(schemaAddVideo),
+  });
 
   const [confirmDialog, setConfirmDialog] = useState({
     isOpen: false,
     title: "",
     subtitle: "",
   });
+
+  const [onRequest, setOnRequest] = useState(false);
 
   const onDelete = async (mediaId) => {
     const { response, err } = await apiCreateMovie.deleteMovie({ mediaId });
@@ -69,23 +62,16 @@ const FormImages = () => {
     }
   };
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-  } = useForm({ resolver: zodResolver(fileSchema) });
-
   const onSubmit = async (data) => {
     data.mediaId = movieData.id;
+
     setOnRequest(true);
-    const { response, err } = await apiCreateMovie.uploadImages(data);
+    const { response, err } = await apiCreateMovie.addVideoMovie(data);
     setOnRequest(false);
     if (response) {
-      dispatch(saveImagesMovie(response));
-      showToast("Saved Images succesffuly", "success");
+      dispatch(saveVideoMovie(response));
+      showToast("Saved succesffuly", "success");
     }
-
     if (err) {
       showToast(err.message, "error");
     }
@@ -95,10 +81,13 @@ const FormImages = () => {
     <Box component="form" minWidth="750px" onSubmit={handleSubmit(onSubmit)}>
       <Typography
         variant="h6"
-        sx={{ fontWeight: 600, textAlign: "center", mb: 7 }}
+        sx={{ fontWeight: 600, textAlign: "center", mb: 4 }}
       >
-        Upload images for movie created
+        Add a Video
       </Typography>
+      <Box display="flex" alignItems="center" justifyContent="center" mb={3}>
+        <img src={movieData?.poster_path} alt={movieData.title} width="300px" />
+      </Box>
 
       <Stack
         flexDirection="column"
@@ -124,23 +113,48 @@ const FormImages = () => {
           </Box>
         </Stack>
       </Stack>
-
-      <Stack direction="row" alignItems="center" justifyContent="space-around">
-        <FileInput
-          register={register}
-          name="poster"
-          id="poster"
+      <Stack
+        direction="row"
+        alignItems="center"
+        gap={5}
+        mb={5}
+        justifyContent="space-around"
+      >
+        <SelectCustom
+          type="select"
+          id="siteMovie"
+          label="Site"
+          name="siteMovie"
+          required
+          {...register("siteMovie")}
           errors={errors}
-          setValue={setValue}
-          label="Upload poster file here"
-        />
-        <FileInput
-          register={register}
-          name="backdrop"
-          id="backdrop"
+          disabled={true}
+        >
+          <option value="Youtube">YouTube</option>
+        </SelectCustom>
+        <SelectCustom
+          type="select"
+          id="typeMovie"
+          label="Type Video"
+          name="typeMovie"
+          required
+          {...register("typeVideo")}
           errors={errors}
-          setValue={setValue}
-          label="Upload backdrop file here"
+          disabled={true}
+        >
+          <option value="Official Trailer">Official Trailer</option>
+        </SelectCustom>
+      </Stack>
+      <Stack>
+        <InputCustom
+          id="key"
+          name="key"
+          type="text"
+          placeholder="Source Key"
+          label="Source Key"
+          required
+          register={register}
+          errors={errors}
         />
       </Stack>
       <Stack mt={5} alignItems="center">
@@ -186,4 +200,4 @@ const FormImages = () => {
   );
 };
 
-export default FormImages;
+export default FormVideo;
