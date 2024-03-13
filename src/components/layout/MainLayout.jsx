@@ -19,7 +19,7 @@ const MainLayout = () => {
         sx={{
           flexGrow: 1,
           minHeight: "100vh",
-          backgroundColor: `${theme.palette.background.default}`,
+          backgroundColor: "#F5F6FA",
           width: { sm: `calc(100% - ${sidebarWidth}px)` },
         }}
       >

@@ -22,7 +22,7 @@ export default function Topbar({ toggleCollapse }) {
       <AppBar
         position="static"
         sx={{
-          background: "#f3f4f4 !important",
+          background: "#fff !important",
           boxShadow: "none !important",
           color: "black",
         }}
