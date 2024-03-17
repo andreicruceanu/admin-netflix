@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import infoApi from "../api/modules/infoUsersAndMovie.api";
+import { showToast } from "../utils/functions";
 
 export function useFetchInfo() {
   const [info, setInfo] = useState([]);
-  const [error, setError] = useState(null);
+  const [recentBooksCreated, setRecentBooksCreated] = useState([]);
   const [onRequestInfo, setOnRequestInfo] = useState(false);
 
   async function fetchGetInfo() {
@@ -11,10 +12,11 @@ export function useFetchInfo() {
     const { response, err } = await infoApi.getInfo();
     setOnRequestInfo(false);
     if (response) {
-      setInfo(response);
+      setInfo(response?.infoAllMoviesAndUsers);
+      setRecentBooksCreated(response?.lastTenBooksCreated);
     }
     if (err) {
-      setError(err);
+      showToast(err.message, "error");
     }
   }
 
@@ -22,5 +24,5 @@ export function useFetchInfo() {
     fetchGetInfo();
   }, []);
 
-  return { info, onRequestInfo, error };
+  return { info, onRequestInfo, recentBooksCreated };
 }
