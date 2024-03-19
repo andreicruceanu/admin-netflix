@@ -6,7 +6,7 @@ const createMovieEndpoints = {
   primaryFacts: "/admin/createMovie",
   addVideoMovie: "admin/createMovie/addVideo",
   uploadImages: "/admin/createMovie/uploadImages",
-  deleteMovies: (movieId) => `/admin/createmovie/${movieId}`,
+  deleteMovies: (movieId) => `/admin/createMovie/${movieId}`,
 };
 
 const apiCreateMovie = {
@@ -46,7 +46,7 @@ const apiCreateMovie = {
       formData.append("backdrop", backdrop[0]);
       formData.append("mediaId", mediaId);
 
-      const response = await privateClient.put(
+      const response = await privateClient.patch(
         createMovieEndpoints.uploadImages,
         formData,
         {
@@ -60,7 +60,7 @@ const apiCreateMovie = {
   },
   addVideoMovie: async ({ ...data }) => {
     try {
-      const response = await privateClient.put(
+      const response = await privateClient.patch(
         createMovieEndpoints.addVideoMovie,
         { ...data }
       );
