@@ -10,6 +10,7 @@ import CreateAdmin from "../pages/createAdmin/CreateAdmin";
 import ForgotPassword from "../pages/Login/ForgotPassword";
 import ResetPassword from "../pages/Login/ResetPassword";
 import CreateMovie from "../pages/createMovie/CreateMovie";
+import Movies from "../pages/Movies/Movies";
 
 export const router = createBrowserRouter([
   {
@@ -56,6 +57,10 @@ export const router = createBrowserRouter([
           {
             path: "create-movie",
             element: <CreateMovie />,
+          },
+          {
+            path: "movies",
+            element: <Movies />,
           },
         ],
       },
