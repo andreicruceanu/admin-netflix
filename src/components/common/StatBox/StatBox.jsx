@@ -7,7 +7,7 @@ const showIconTrending = (value) =>
   value > 0 ? (
     <Box display="flex" alignItems="center">
       <img src={TrendingUp} alt="TrendingUp" />
-      <Typography ml={1} color="#00B69B">{`${value} %`}</Typography>
+      <Typography ml="2px" color="#00B69B">{`${value}%`}</Typography>
       <Typography component="span" fontSize={13} ml={1}>
         Up from yesterday
       </Typography>
@@ -15,7 +15,7 @@ const showIconTrending = (value) =>
   ) : (
     <Box display="flex" alignItems="center">
       <img src={TrendingDown} alt="TrendingDown" />
-      <Typography ml={1} color="#F93C65">{`${value} %`}</Typography>
+      <Typography ml="2px" color="#F93C65">{`${value} %`}</Typography>
       <Typography component="span" fontSize={13} ml={1}>
         Down from yesterday
       </Typography>
@@ -29,6 +29,8 @@ const StatBox = ({ title, value, trending, state }) => {
       backgroundColor="white"
       borderRadius="8px"
       padding={2}
+      width="100%"
+      minHeight="150px"
     >
       <Box
         width="100%"
