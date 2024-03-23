@@ -53,6 +53,7 @@ const Label = styled("label")(({}) => ({
   marginBottom: "5px",
   fontSize: "12px",
   fontWeight: 600,
+  textAlign: "start",
 }));
 
 const Select = styled("select")(({ width }) => ({

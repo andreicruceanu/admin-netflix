@@ -21,14 +21,14 @@ const TextareaCostum = ({
           rows={5}
           className={errors && errors[name] && "error"}
           type={type}
-          {...register(name, { required })}
+          {...register(name, { required: `${name} is required` })}
           placeholder={placeholder}
         />
       </ContainerInput>
       {errors && errors[name] && (
         <Typography
           variant="caption"
-          sx={{ color: "red", marginTop: "5px !important" }}
+          sx={{ color: "red", marginTop: "5px !important", textAlign: "start" }}
         >
           {errors[name].message}
         </Typography>
@@ -48,6 +48,7 @@ const Label = styled("label")(({}) => ({
   fontSize: "12px",
   fontWeight: 600,
   display: "inline-block",
+  textAlign: "start",
 }));
 
 const TextArea = styled("textarea")(({}) => ({

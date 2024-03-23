@@ -1,11 +1,20 @@
 import { Box, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import uploadImg from "../../../assets/images/cloud-upload-regular-240.png";
 import styled from "@emotion/styled";
 import { ImageConfig } from "../../../utils/ImagesConfig";
 
-const FileInput = ({ name, id, register, errors, setValue, label }) => {
+const FileInput = ({
+  name,
+  id,
+  register,
+  errors,
+  setValue,
+  label,
+  defaultValue,
+}) => {
   const [file, setFile] = useState([]);
+  const [defaultValueFiled, setDefaultValueFiled] = useState(defaultValue);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -25,12 +34,24 @@ const FileInput = ({ name, id, register, errors, setValue, label }) => {
   const fileRemove = () => {
     setFile([]);
     setValue(name, []);
+    setDefaultValueFiled(null);
   };
 
   return (
-    <Container>
+    <Container className={defaultValueFiled && "opacity"}>
       <ContainerInput className={errors && errors[name] && "error"}>
-        {file.length > 0 ? (
+        {defaultValueFiled ? (
+          <>
+            <img src={defaultValueFiled} width={200} alt="" />
+            <Button
+              className="buttonDelete"
+              center
+              onClick={() => fileRemove()}
+            >
+              x
+            </Button>
+          </>
+        ) : file.length > 0 ? (
           <>
             {file.map((item, index) => (
               <FileItem key={index}>
@@ -52,7 +73,7 @@ const FileInput = ({ name, id, register, errors, setValue, label }) => {
                     WebkitBoxOrient: "vertical",
                   }}
                 >
-                  {item.name}
+                  {item?.name}
                 </Typography>
                 <Button className="buttonDelete" onClick={() => fileRemove()}>
                   x
@@ -69,7 +90,10 @@ const FileInput = ({ name, id, register, errors, setValue, label }) => {
             <Input
               id={id}
               name={name}
-              {...register(name, require)}
+              {...register(name, {
+                required: true,
+                message: "test",
+              })}
               onChange={handleFileChange}
               type="file"
               multiple={false}
@@ -86,7 +110,15 @@ const FileInput = ({ name, id, register, errors, setValue, label }) => {
   );
 };
 
-const Container = styled("div")(({}) => ({}));
+const Container = styled("div")(({}) => ({
+  transition: "opacity 0.3s ease",
+  "&.opacity": {
+    opacity: 1,
+  },
+  "&.opacity:hover": {
+    opacity: 0.7,
+  },
+}));
 
 const FileItem = styled("div")(({}) => ({
   display: "flex",
@@ -130,7 +162,7 @@ const Label = styled("div")(({}) => ({
   textAlign: "center",
 }));
 
-const Button = styled("button")(({}) => ({
+const Button = styled("button")(({ center }) => ({
   position: "absolute",
   bottom: "10px",
   borderRadius: "10px",
@@ -147,6 +179,11 @@ const Button = styled("button")(({}) => ({
   backgroundColor: "#c5dbe2 ",
   transform: "translateX(-50%)",
   transition: "opacity 0.3s ease",
+  ...(center && {
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50% , -50%)",
+  }),
 }));
 
 export default FileInput;

@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import React from "react";
-const ConfirmDialog = ({ confirmDialog, setConfirmDialog }) => {
+const ConfirmDialog = ({ confirmDialog, setConfirmDialog, onRequest }) => {
   return (
     <Dialog
       aria-labelledby="alert-dialog-title"
@@ -56,7 +56,7 @@ const ConfirmDialog = ({ confirmDialog, setConfirmDialog }) => {
           sx={{ minWidth: "150px" }}
           onClick={confirmDialog?.onConfirm}
         >
-          Delete
+          {onRequest && onRequest !== "undefined " ? "Loading..." : "Delete"}
         </Button>
       </DialogActions>
     </Dialog>

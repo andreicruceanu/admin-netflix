@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import {
   Box,
@@ -13,7 +13,10 @@ import {
 import { useTheme } from "@emotion/react";
 
 const MultiSelectCustum = React.forwardRef(
-  ({ id, label, name, onBlur, errors, option, setValue }, ref) => {
+  (
+    { id, label, name, onBlur, errors, option, setValue, defaultValue },
+    ref
+  ) => {
     const theme = useTheme();
     const [genresName, setGenresName] = useState(option);
 
@@ -27,6 +30,13 @@ const MultiSelectCustum = React.forwardRef(
         typeof value === "string" ? value.split(",") : value
       );
     };
+
+    useEffect(() => {
+      if (defaultValue) {
+        setGenresName(defaultValue);
+        setValue("genre_ids", defaultValue);
+      }
+    }, [defaultValue, setValue]);
 
     return (
       <FormControl sx={{ width: "100%" }}>
@@ -67,7 +77,11 @@ const MultiSelectCustum = React.forwardRef(
         {errors && errors[name] && (
           <Typography
             variant="caption"
-            sx={{ color: "red", marginTop: "5px !important" }}
+            sx={{
+              color: "red",
+              marginTop: "5px !important",
+              textAlign: "start",
+            }}
           >
             {errors[name].message}
           </Typography>

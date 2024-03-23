@@ -19,14 +19,14 @@ const InputCustom = ({
           name={id}
           className={errors && errors[name] && "error"}
           type={type}
-          {...register(name, { required })}
+          {...register(name, { required: `${name} is required` })}
           placeholder={placeholder}
         />
       </ContainerInput>
       {errors && errors[name] && (
         <Typography
           variant="caption"
-          sx={{ color: "red", marginTop: "5px !important" }}
+          sx={{ color: "red", marginTop: "5px !important", textAlign: "start" }}
         >
           {errors[name].message}
         </Typography>
@@ -46,6 +46,7 @@ const Label = styled("label")(({}) => ({
   fontSize: "12px",
   fontWeight: 600,
   display: "inline-block",
+  textAlign: "start",
 }));
 
 const Input = styled("input")(({}) => ({
@@ -59,6 +60,7 @@ const Input = styled("input")(({}) => ({
   outline: "none",
   "&.error": {
     border: "1px solid #e54949",
+    textAlign: "start",
   },
   "&.error:focus": {
     border: "1px solid #e54949",
