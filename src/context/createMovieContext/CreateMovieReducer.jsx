@@ -31,6 +31,12 @@ const CreateMovieReducer = (state, action) => {
         movieStatus: null,
         activeStep: 0,
       };
+    case "LOGOUTFORMOVIE":
+      return {
+        movieData: null,
+        movieStatus: null,
+        activeStep: 0,
+      };
     default:
       return {
         ...state,
