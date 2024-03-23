@@ -1,8 +1,7 @@
 import privateClient from "../client/private.client";
 
 const createMovieEndpoints = {
-  simpleEdit: "/admin/editMovie",
-  withImage: "/admin/editMovie/newImage",
+  editMovie: "/admin/editMovie",
 };
 
 const apiEditMovie = {
@@ -18,12 +17,9 @@ const apiEditMovie = {
         Object.entries(data).forEach(([key, value]) => {
           formData.set(key, value);
         });
-
-        console.log(formData);
         const response = await privateClient.put(
-          createMovieEndpoints.withImage,
+          createMovieEndpoints.editMovie,
           formData,
-
           {
             headers: { "Content-Type": "multipart/form-data" },
           }
@@ -35,8 +31,8 @@ const apiEditMovie = {
     } else
       try {
         const response = await privateClient.put(
-          createMovieEndpoints.simpleEdit,
-          { poster, backdrop, ...data }
+          createMovieEndpoints.editMovie,
+          { ...data }
         );
         return { response };
       } catch (err) {
