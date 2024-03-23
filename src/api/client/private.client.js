@@ -15,7 +15,7 @@ privateClient.interceptors.request.use(async (config) => {
     headers: {
       "Content-Type": "application/json",
       ...config.headers,
-      Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   };
 });
