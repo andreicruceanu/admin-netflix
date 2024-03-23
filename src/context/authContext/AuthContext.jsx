@@ -1,11 +1,15 @@
 import { createContext, useReducer, useEffect } from "react";
 import AuthReducer from "./AuthReducer";
 
+const user = JSON.parse(localStorage.getItem("user"));
+const token = localStorage.getItem("jwt_token");
+const email = localStorage.getItem("email");
+
 const INITIAL_STATE = {
-  user: JSON.parse(localStorage.getItem("user"))
-    ? JSON.parse(localStorage.getItem("user"))
-    : null,
+  user: user || null,
   twoFAUser: null,
+  token: token || null,
+  email: email || null,
   isFetching: false,
   error: false,
 };
@@ -17,7 +21,9 @@ export const AuthContextProvider = ({ children }) => {
 
   useEffect(() => {
     localStorage.setItem("user", JSON.stringify(state.user));
-  }, [state.user]);
+    localStorage.setItem("token", state.token);
+    localStorage.setItem("email", state.email);
+  }, [state.user, state.token, state.email]);
 
   return (
     <AuthContext.Provider
