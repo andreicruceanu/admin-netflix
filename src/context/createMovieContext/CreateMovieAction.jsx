@@ -20,3 +20,7 @@ export const saveVideoMovie = (dataMovie) => ({
 export const createAnotherMovie = () => ({
   type: "CREATE_ANOTHER_MOVIE",
 });
+
+export const logoutForMovie = () => ({
+  type: "LOGOUTFORMOVIE",
+});
