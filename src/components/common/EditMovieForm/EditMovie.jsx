@@ -1,25 +1,24 @@
+import { useState } from "react";
 import { Box, Stack } from "@mui/material";
-import React, { useState } from "react";
-import InputCustom from "../inputs/InputCustom";
 import { useForm } from "react-hook-form";
-import ButtonCostum from "../Buttons/ButtonCostum";
 import { showToast } from "../../../utils/functions";
+import { useMovieStatusAndGenres } from "../../../hooks/useMovieStatusAndGenres";
+import InputCustom from "../inputs/InputCustom";
+import ButtonCostum from "../Buttons/ButtonCostum";
 import SelectCustom from "../inputs/SelectCustom";
 import MultiSelectCustum from "../inputs/MultiSelectCustom";
 import TextareaCostum from "../inputs/TextareaCostum";
-import { useMovieStatusAndGenres } from "../../../hooks/useMovieStatusAndGenres";
 import FileInput from "../inputs/FileInput";
 import apiEditMovie from "../../../api/modules/editMovie.api";
 
 const EditMovie = ({ data, onClose, setAllMovies }) => {
   const [onRequest, setOnRequest] = useState(false);
   const { movieStatus, movieGenres } = useMovieStatusAndGenres();
-  console.log(data);
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty, isValid },
     setValue,
   } = useForm({
     defaultValues: {
@@ -257,7 +256,7 @@ const EditMovie = ({ data, onClose, setAllMovies }) => {
           size="large"
           variant="contained"
           loading={onRequest}
-          disabled={onRequest}
+          disabled={onRequest || !isDirty || !isValid}
           sx={{ width: "250px", padding: "15px 0px", borderRadius: "12px" }}
         >
           {onRequest ? "Loading..." : "Save"}

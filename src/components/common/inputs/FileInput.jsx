@@ -1,8 +1,8 @@
-import { Box, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
+import { Typography } from "@mui/material";
+import { ImageConfig } from "../../../utils/ImagesConfig";
 import uploadImg from "../../../assets/images/cloud-upload-regular-240.png";
 import styled from "@emotion/styled";
-import { ImageConfig } from "../../../utils/ImagesConfig";
 
 const FileInput = ({
   name,
@@ -110,7 +110,7 @@ const FileInput = ({
   );
 };
 
-const Container = styled("div")(({}) => ({
+const Container = styled("div")(() => ({
   transition: "opacity 0.3s ease",
   "&.opacity": {
     opacity: 1,
@@ -120,7 +120,7 @@ const Container = styled("div")(({}) => ({
   },
 }));
 
-const FileItem = styled("div")(({}) => ({
+const FileItem = styled("div")(() => ({
   display: "flex",
   alignItems: "center",
   "& img": {
@@ -128,7 +128,7 @@ const FileItem = styled("div")(({}) => ({
   },
 }));
 
-const ContainerInput = styled("div")(({}) => ({
+const ContainerInput = styled("div")(() => ({
   position: "relative",
   width: "200px",
   height: "150px",
@@ -148,7 +148,7 @@ const ContainerInput = styled("div")(({}) => ({
   },
 }));
 
-const Input = styled("input")(({}) => ({
+const Input = styled("input")(() => ({
   opacity: 0,
   position: "absolute",
   top: 0,
@@ -158,7 +158,7 @@ const Input = styled("input")(({}) => ({
   cursor: "pointer",
 }));
 
-const Label = styled("div")(({}) => ({
+const Label = styled("div")(() => ({
   textAlign: "center",
 }));
 

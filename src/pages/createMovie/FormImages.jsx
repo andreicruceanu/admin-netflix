@@ -1,18 +1,19 @@
-import { Box, Stack, TextField, Typography } from "@mui/material";
-import React, { useContext, useState } from "react";
-import FileInput from "../../components/common/inputs/FileInput";
-import ButtonCostum from "../../components/common/Buttons/ButtonCostum";
+import { Box, Stack, Typography } from "@mui/material";
+import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { CreateMovieContext } from "../../context/createMovieContext/CreateMovieContext";
-import ConfirmDialog from "../../components/common/dialogConfirmation/DialogConfirmation";
-import apiCreateMovie from "../../api/modules/createMovie";
 import { showToast } from "../../utils/functions";
+import { CreateMovieContext } from "../../context/createMovieContext/CreateMovieContext";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import {
   deleteMovie,
   saveImagesMovie,
 } from "../../context/createMovieContext/CreateMovieAction";
+import { useGetMovie } from "../../hooks/useGetMovie";
+import FileInput from "../../components/common/inputs/FileInput";
+import ButtonCostum from "../../components/common/Buttons/ButtonCostum";
+import ConfirmDialog from "../../components/common/dialogConfirmation/DialogConfirmation";
+import apiCreateMovie from "../../api/modules/createMovie";
 
 const FormImages = () => {
   const MAX_FILE_SIZE = 5000000;
@@ -68,6 +69,17 @@ const FormImages = () => {
       showToast(err.message, "error");
     }
   };
+
+  const { movie, error } = useGetMovie(movieData._id);
+
+  useEffect(() => {
+    if (error) {
+      showToast(error.message, "error");
+    }
+    if (!movie && movie !== undefined) {
+      dispatch(deleteMovie());
+    }
+  }, [movie, error]);
 
   const {
     register,

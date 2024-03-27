@@ -34,7 +34,6 @@ const infoApi = {
   },
   getMovie: async ({ mediaId }) => {
     try {
-      console.log({ mediaId });
       const response = await privateClient.get(
         authEndpoints.getMovie({ mediaId })
       );

@@ -1,12 +1,13 @@
-import { Avatar, Box, Chip, CircularProgress } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import Header from "../../components/common/Header/Header";
+import { Box, CircularProgress } from "@mui/material";
+import { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { useFetchAllMovies } from "../../hooks/useFetchAllMovies";
 import { showToast } from "../../utils/functions";
+import Header from "../../components/common/Header/Header";
 import moment from "moment";
 import NoImgIcon from "../../assets/images/no-image-icon.png";
 import MoviesActions from "./MoviesActions";
+import StatusMovieChip from "../../components/common/StatusMovieChip/StatusMovieChip";
 
 const Movies = () => {
   const { movies, error, onRequest } = useFetchAllMovies();
@@ -16,14 +17,12 @@ const Movies = () => {
   useEffect(() => {
     setAllMovies(movies);
   }, [movies]);
-
-  console.log(allMovies);
-
   const columns = [
     {
       field: "poster_path",
       headerName: "Poster",
       width: 100,
+      align: "center",
       renderCell: (params) => (
         <img
           width="70px"
@@ -52,7 +51,7 @@ const Movies = () => {
       headerName: "Status",
       flex: 1,
       renderCell: (params) => (
-        <Chip label={params.row?.state_movie} variant="rounded" />
+        <StatusMovieChip value={params.row?.state_movie} />
       ),
     },
     {
@@ -97,11 +96,8 @@ const Movies = () => {
 
   return (
     allMovies && (
-      <Box m="20px">
-        <Header
-          title="Movies"
-          subtitle="List of Contacts for Future Reference"
-        />
+      <Box padding="25px">
+        <Header title="Movies" />
         <Box
           m="40px 0 0 0"
           height="75vh"

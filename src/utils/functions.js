@@ -45,6 +45,21 @@ export const iconsInfoDashboard = (state) => {
     case "movies":
       return <img src={MoviesIcons} alt="Icon Movies" />;
     default:
-      return null;
+      return "";
+  }
+};
+
+export const releaseYear = (date) => new Date(date).getFullYear();
+
+export const statusMovieColor = (data) => {
+  switch (data) {
+    case "primary_saved":
+      return { label: "Primary saved", bg: "#FFA756" };
+    case "completed":
+      return { label: "Completed", bg: "#00B69B" };
+    case "images_saved":
+      return { label: "Images saved", bg: "#6226EF" };
+    default:
+      return "";
   }
 };

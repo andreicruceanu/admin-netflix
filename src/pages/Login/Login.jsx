@@ -2,26 +2,24 @@ import {
   Alert,
   Box,
   Checkbox,
-  CircularProgress,
   FormControlLabel,
   FormGroup,
   Stack,
   Typography,
-  circularProgressClasses,
-  colors,
 } from "@mui/material";
-import React, { useContext, useState } from "react";
-import Logo from "../../assets/images/logo.png";
-import LoginBg from "../../assets/images/LoginBg.svg";
-import Animate from "../../components/common/animate/Animate";
 import { z } from "zod";
+import { useContext, useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { AuthContext } from "../../context/authContext/AuthContext";
+import Logo from "../../assets/images/logo.png";
+import LoginBg from "../../assets/images/LoginBg.svg";
+import Animate from "../../components/common/animate/Animate";
 
 import {
   loginEnd,
   loginFailure,
+  loginSaveToken,
   loginStart,
   loginSuccess,
 } from "../../context/authContext/AuthActions";
@@ -38,7 +36,6 @@ const schema = z.object({
   username: z.string().min(3),
   password: z
     .string()
-    .nonempty("Password is required")
     .regex(
       configsApp.rulesPassword,
       "Password must contain at least one uppercase letter, one lowercase letter, one special character"
@@ -54,6 +51,10 @@ const Login = () => {
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    navigate("/login");
+  }, [navigate]);
+
   const {
     register,
     handleSubmit,
@@ -68,10 +69,9 @@ const Login = () => {
     const { response, err } = await authApi.login(data);
     dispatch(loginEnd(response));
     if (response) {
-      localStorage.setItem("jwt_token", response.token);
-      localStorage.setItem("email", response.email);
+      dispatch(loginSaveToken(response));
       if (response.twoFactorAuth) {
-        navigate("/auth/two-factor");
+        return navigate("/auth/two-factor");
       } else {
         dispatch(loginSuccess(response));
         setAnimationLogin(true);

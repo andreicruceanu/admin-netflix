@@ -1,9 +1,9 @@
 import { Box, Step, StepLabel, Stepper } from "@mui/material";
+import { CreateMovieContext } from "../../context/createMovieContext/CreateMovieContext";
+import { useContext } from "react";
 import ContainerContent from "../../components/common/container/ContainerContent";
 import FormCreateMovie from "./FormCreateMovie";
-import { useContext } from "react";
 import FormImages from "./FormImages";
-import { CreateMovieContext } from "../../context/createMovieContext/CreateMovieContext";
 import FormVideo from "./FormVideo";
 import CompletedCreateMovie from "./CompletedCreateMovie";
 
@@ -27,7 +27,7 @@ const CreateMovie = () => {
 
   return (
     <ContainerContent title={"Create Movie"}>
-      <Box minWidth="750px" mt>
+      <Box minWidth="750px">
         <Stepper
           activeStep={activeStep}
           alternativeLabel

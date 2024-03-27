@@ -1,9 +1,9 @@
 import { Box } from "@mui/material";
-import React, { useContext } from "react";
-import SuccesImages from "../../assets/images/Succes.svg";
-import ButtonCostum from "../../components/common/Buttons/ButtonCostum";
+import { useContext } from "react";
 import { createAnotherMovie } from "../../context/createMovieContext/CreateMovieAction";
 import { CreateMovieContext } from "../../context/createMovieContext/CreateMovieContext";
+import SuccesImages from "../../assets/images/Succes.svg";
+import ButtonCostum from "../../components/common/Buttons/ButtonCostum";
 
 const CompletedCreateMovie = () => {
   const { dispatch } = useContext(CreateMovieContext);

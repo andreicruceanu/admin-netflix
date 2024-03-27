@@ -1,5 +1,4 @@
 import { createBrowserRouter } from "react-router-dom";
-
 import Login from "../pages/Login/Login";
 import TwoFA from "../pages/Login/TwoFA";
 import ProtectedRouter from "../components/common/ProtectedRoute/ProtectedRoute";
@@ -11,6 +10,7 @@ import ForgotPassword from "../pages/Login/ForgotPassword";
 import ResetPassword from "../pages/Login/ResetPassword";
 import CreateMovie from "../pages/createMovie/CreateMovie";
 import Movies from "../pages/Movies/Movies";
+import SettingUser from "../pages/SettingUser/SettingUser";
 
 export const router = createBrowserRouter([
   {
@@ -43,27 +43,59 @@ export const router = createBrowserRouter([
         element: <MainLayout />,
         children: [
           {
-            element: <Dashborad />,
+            element: (
+              <ProtectedRouter>
+                <Dashborad />
+              </ProtectedRouter>
+            ),
             index: true,
           },
           {
             path: "userApp",
-            element: <UsersApp />,
+            element: (
+              <ProtectedRouter>
+                <UsersApp />
+              </ProtectedRouter>
+            ),
           },
           {
             path: "create-admin",
-            element: <CreateAdmin />,
+            element: (
+              <ProtectedRouter>
+                <CreateAdmin />
+              </ProtectedRouter>
+            ),
           },
           {
             path: "create-movie",
-            element: <CreateMovie />,
+            element: (
+              <ProtectedRouter>
+                <CreateMovie />
+              </ProtectedRouter>
+            ),
           },
           {
             path: "movies",
-            element: <Movies />,
+            element: (
+              <ProtectedRouter>
+                <Movies />,
+              </ProtectedRouter>
+            ),
+          },
+          {
+            path: "setting",
+            element: (
+              <ProtectedRouter>
+                <SettingUser />,
+              </ProtectedRouter>
+            ),
           },
         ],
       },
     ],
+  },
+  {
+    path: "*",
+    element: <Login />,
   },
 ]);

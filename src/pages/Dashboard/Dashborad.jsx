@@ -6,12 +6,13 @@ import {
   Chip,
   CircularProgress,
 } from "@mui/material";
+import { useFetchInfo } from "../../hooks/useFetchInfo";
+import { releaseYear } from "../../utils/functions";
 import Header from "../../components/common/Header/Header";
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
-import { useFetchInfo } from "../../hooks/useFetchInfo";
 import StatBox from "../../components/common/StatBox/StatBox";
 import LineChart from "../../components/common/LineChart/LineChart";
-import { releaseYear } from "../../utils/functions";
+
 const Dashboard = () => {
   const { info, onRequestInfo, recentBooksCreated } = useFetchInfo();
 
@@ -30,24 +31,26 @@ const Dashboard = () => {
   }
 
   return (
-    <Box m="20px">
-      <Box display="flex" justifyContent="space-between" alignItems="center">
+    <Box p="25px">
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        mb={3}
+      >
         <Header title="DASHBOARD" subtitle="Welcome to your dashboard" />
-
-        <Box>
-          <Button
-            sx={{
-              backgroundColor: "#4880FF",
-              color: "white",
-              fontSize: "14px",
-              fontWeight: "bold",
-              padding: "10px 20px",
-            }}
-          >
-            <DownloadOutlinedIcon sx={{ mr: "10px" }} />
-            Download Reports
-          </Button>
-        </Box>
+        <Button
+          sx={{
+            backgroundColor: "#4880FF",
+            color: "white",
+            fontSize: "14px",
+            fontWeight: "bold",
+            padding: "10px 20px",
+          }}
+        >
+          <DownloadOutlinedIcon sx={{ mr: "10px" }} />
+          Download Reports
+        </Button>
       </Box>
 
       {/* GRID & CHARTS */}

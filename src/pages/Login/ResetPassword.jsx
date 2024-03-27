@@ -1,54 +1,32 @@
-import { Box, Stack, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import SetPasswordImg from "../../assets/images/set-password.svg";
+import { Box, Stack } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { schemaResetPassword } from "../../utils/schemaValidation/SchemaResetPassword";
+import { showToast } from "../../utils/functions";
 import Logo from "../../assets/images/logo.png";
+import SetPasswordImg from "../../assets/images/set-password.svg";
 import ButtonCostum from "../../components/common/Buttons/ButtonCostum";
 import Animate from "../../components/common/animate/Animate";
 import InputCustom from "../../components/common/inputs/InputCustom";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { configsApp } from "../../configs/configsApp";
-import { useNavigate, useSearchParams } from "react-router-dom";
 import authApi from "../../api/modules/auth.api";
 import ContainerAuth from "../../components/common/container/ContainerAuth";
-import { showToast } from "../../utils/functions";
-
-const schema = z
-  .object({
-    newPassword: z
-      .string()
-      .nonempty("Password is required")
-      .regex(
-        configsApp.rulesPassword,
-        "Password must contain at least one uppercase letter, one lowercase letter, one special character"
-      ),
-    confirmPassword: z
-      .string()
-      .regex(
-        configsApp.rulesPassword,
-        "Password must contain at least one uppercase letter, one lowercase letter, one special character"
-      ),
-  })
-  .refine((data) => data.newPassword === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  });
 
 const ResetPassword = () => {
   const [searchParams] = useSearchParams();
   const query = searchParams.get("token");
   const navigate = useNavigate();
-
   const [onRequest, setOnRequest] = useState(false);
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty, isValid },
   } = useForm({
     defaultValues: { newPassword: "", confirmPassword: "" },
-    resolver: zodResolver(schema),
+    resolver: zodResolver(schemaResetPassword),
+    mode: "onTouched",
   });
 
   const onSubmit = async (data) => {
@@ -155,7 +133,7 @@ const ResetPassword = () => {
                     type="submit"
                     size="large"
                     variant="contained"
-                    disabled={onRequest}
+                    disabled={onRequest || !isDirty || !isValid}
                     loading={onRequest}
                   >
                     {onRequest ? "Loading..." : "Save & go to Login"}

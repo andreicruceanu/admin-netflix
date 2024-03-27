@@ -44,12 +44,12 @@ const SelectCustom = React.forwardRef(
     );
   }
 );
-const ContainerInput = styled("div")(({}) => ({
+const ContainerInput = styled("div")(() => ({
   display: "flex",
   flexDirection: "column",
   width: "100%",
 }));
-const Label = styled("label")(({}) => ({
+const Label = styled("label")(() => ({
   marginBottom: "5px",
   fontSize: "12px",
   fontWeight: 600,
@@ -77,6 +77,9 @@ const Select = styled("select")(({ width }) => ({
   },
   "&::placeholder": {
     opacity: "0.7",
+  },
+  "&:disabled": {
+    background: "#ebebeb",
   },
   "@media (max-width:900px)": {
     background: "#fff",
