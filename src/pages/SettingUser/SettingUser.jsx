@@ -1,53 +1,58 @@
-import { useState } from "react";
-import { Box, Stack } from "@mui/material";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
+import { Avatar, Box, Stack } from "@mui/material";
+import { AuthContext } from "../../context/authContext/AuthContext";
 import { showToast } from "../../utils/functions";
-import { schemaCreateUser } from "../../utils/schemaValidation/SchemaCreateAdmin";
-import ContainerContent from "../../components/common/container/ContainerContent";
-import ButtonCostum from "../../components/common/Buttons/ButtonCostum";
+import { schemaUpdateAdmin } from "../../utils/schemaValidation/SchemaUpdateAdmin";
+import { zodResolver } from "@hookform/resolvers/zod";
 import InputCustom from "../../components/common/inputs/InputCustom";
+import ContainerContent from "../../components/common/container/ContainerContent";
 import SelectCustom from "../../components/common/inputs/SelectCustom";
+import ButtonCostum from "../../components/common/Buttons/ButtonCostum";
 import adminApi from "../../api/modules/admin.api";
 
-const CreateAdmin = () => {
+const SettingUser = () => {
   const [onRequest, setOnRequest] = useState(false);
+
+  const { user } = useContext(AuthContext);
 
   const {
     register,
     handleSubmit,
     formState: { errors, isDirty, isValid },
-
-    reset,
   } = useForm({
     defaultValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      username: "",
-      password: "",
-      role: "",
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      username: user.username,
+      password: "**********",
+      role: user.role,
     },
     mode: "onTouched",
-    resolver: zodResolver(schemaCreateUser),
+    resolver: zodResolver(schemaUpdateAdmin),
   });
 
   const onSubmit = async (data) => {
     setOnRequest(true);
-    const { response, err } = await adminApi.createAdmin(data);
+    const { response, err } = await adminApi.updateAdmin(data);
     setOnRequest(false);
+
     if (response) {
-      showToast("Succesfuly create admin", "success");
-      reset();
+      showToast("Succesfuly update admin", "success");
     }
+
     if (err) {
       showToast(err.message, "error");
     }
   };
 
   return (
-    <ContainerContent title="Create New Admin">
+    <ContainerContent title="Setting User">
       <Box component="form" minWidth="750px" onSubmit={handleSubmit(onSubmit)}>
+        <Box sx={{ display: "flex", with: "100%", justifyContent: "center" }}>
+          <Avatar sx={{ width: "60px", height: "60px", mb: 2 }} />
+        </Box>
         <Stack flexDirection="row" gap={5} mb={5}>
           <InputCustom
             id="firstName"
@@ -80,6 +85,7 @@ const CreateAdmin = () => {
             label="Email"
             register={register}
             required
+            disabled
             errors={errors}
           />
           <InputCustom
@@ -91,6 +97,7 @@ const CreateAdmin = () => {
             register={register}
             required
             errors={errors}
+            disabled
           />
         </Stack>
 
@@ -104,6 +111,8 @@ const CreateAdmin = () => {
             required
             register={register}
             errors={errors}
+            changePasswordProp={true}
+            disabled
           />
           <SelectCustom
             type="select"
@@ -113,6 +122,7 @@ const CreateAdmin = () => {
             width="60%"
             {...register("role")}
             errors={errors}
+            disabled
           >
             <option value="guest">Guest</option>
             <option value="admin">Admin</option>
@@ -128,7 +138,7 @@ const CreateAdmin = () => {
             disabled={onRequest || !isDirty || !isValid}
             sx={{ width: "250px", padding: "15px 0px", borderRadius: "12px" }}
           >
-            {onRequest ? "Loading..." : "Create Admin"}
+            {onRequest ? "Loading..." : "Save"}
           </ButtonCostum>
         </Stack>
       </Box>
@@ -136,4 +146,4 @@ const CreateAdmin = () => {
   );
 };
 
-export default CreateAdmin;
+export default SettingUser;

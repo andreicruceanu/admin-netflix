@@ -1,5 +1,4 @@
 const CreateMovieReducer = (state, action) => {
-  console.log(action);
   switch (action.type) {
     case "CREATE_MOVIE_PRIMARY_FACTS_SUCCESS":
       return {

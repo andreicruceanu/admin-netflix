@@ -1,22 +1,22 @@
 import {
   AppBar,
+  Avatar,
   Box,
   IconButton,
+  InputBase,
   Toolbar,
   Typography,
-  useTheme,
 } from "@mui/material";
-import React, { useContext } from "react";
+import { Search } from "@mui/icons-material";
+import { ReactComponent as Notification } from "../../../assets/images/notification.svg";
+import { useContext } from "react";
+import { AuthContext } from "../../../context/authContext/AuthContext";
 import MenuIcon from "@mui/icons-material/Menu";
-import { ColorModeContext } from "../../../theme";
-import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
-import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
-export default function Topbar({ toggleCollapse }) {
-  const name = localStorage.getItem("firstName") || "Andrei";
+import Flag from "../../../assets/images/UKFlag.png";
 
-  // const theme = useTheme();
-  // const colorMode = useContext(ColorModeContext);
-  //
+export default function Topbar({ toggleCollapse }) {
+  const { user } = useContext(AuthContext);
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
@@ -27,20 +27,65 @@ export default function Topbar({ toggleCollapse }) {
           color: "black",
         }}
       >
-        <Toolbar sx={{ p: "15px 0" }}>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2, "& svg ": "grey" }}
-            onClick={toggleCollapse}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            {`Welcome , ${name}`}
-          </Typography>
+        <Toolbar
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            p: "15px 0",
+          }}
+        >
+          <Box display="flex">
+            <IconButton
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              sx={{ mr: 2, "& svg ": "grey" }}
+              onClick={toggleCollapse}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Box
+              sx={{
+                backgroundColor: "#F5F6FA",
+                borderRadius: "14px",
+                gap: "8px",
+                p: "0.1rem 1rem",
+                display: "flex",
+                justifyContent: "start",
+                alignItems: "center",
+                minWidth: "400px",
+              }}
+            >
+              <Search sx={{ color: "#8a8a8a", fontSize: "22px" }} />
+              <InputBase placeholder="Search..." />
+            </Box>
+          </Box>
+          <Box display="flex" alignItems="center">
+            <Notification />
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              gap={1}
+              ml={2}
+            >
+              <img src={Flag} alt="Flag" width="35px" />
+              <Typography variant="caption">English</Typography>
+            </Box>
+            {user && (
+              <Box display="flex" alignItems="center" gap={1} ml={2}>
+                <Avatar />
+                <Box display="flex" flexDirection="column">
+                  <Typography variant="body">
+                    {user?.lastName + " " + user?.firstName}
+                  </Typography>
+                  <Typography variant="caption">{user.role}</Typography>
+                </Box>
+              </Box>
+            )}
+          </Box>
         </Toolbar>
       </AppBar>
     </Box>

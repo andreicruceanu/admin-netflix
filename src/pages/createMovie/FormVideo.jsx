@@ -1,41 +1,35 @@
-import React, { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CreateMovieContext } from "../../context/createMovieContext/CreateMovieContext";
 import { Box, Stack, Typography } from "@mui/material";
-import ButtonCostum from "../../components/common/Buttons/ButtonCostum";
-import apiCreateMovie from "../../api/modules/createMovie";
 import { showToast } from "../../utils/functions";
 import {
   deleteMovie,
   saveVideoMovie,
 } from "../../context/createMovieContext/CreateMovieAction";
-import ConfirmDialog from "../../components/common/dialogConfirmation/DialogConfirmation";
-import SelectCustom from "../../components/common/inputs/SelectCustom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { useGetMovie } from "../../hooks/useGetMovie";
+import { schemaAddVideo } from "../../utils/schemaValidation/SchemaAddVideo";
+import ButtonCostum from "../../components/common/Buttons/ButtonCostum";
+import apiCreateMovie from "../../api/modules/createMovie";
+import ConfirmDialog from "../../components/common/dialogConfirmation/DialogConfirmation";
+import SelectCustom from "../../components/common/inputs/SelectCustom";
 import InputCustom from "../../components/common/inputs/InputCustom";
 
 const FormVideo = () => {
   const { dispatch, movieData, movieStatus } = useContext(CreateMovieContext);
 
-  console.log(movieData);
-
-  const schemaAddVideo = z.object({
-    key: z.string().min(1, "Source Key is required"),
-    siteMovie: z.string(),
-    typeVideo: z.string(),
-  });
-
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty, isValid },
   } = useForm({
     defaultValues: {
       siteMovie: "Youtube",
       typeVideo: "Official Trailer",
       key: "",
     },
+    mode: "onTouched",
     resolver: zodResolver(schemaAddVideo),
   });
 
@@ -46,6 +40,18 @@ const FormVideo = () => {
   });
 
   const [onRequest, setOnRequest] = useState(false);
+
+  const { movie, error } = useGetMovie(movieData._id);
+
+  useEffect(() => {
+    if (error) {
+      showToast(error.message, "error");
+    }
+
+    if (!movie && movie !== undefined) {
+      dispatch(deleteMovie());
+    }
+  }, [movie, error]);
 
   const onDelete = async (mediaId) => {
     const { response, err } = await apiCreateMovie.deleteMovie({ mediaId });
@@ -163,7 +169,7 @@ const FormVideo = () => {
           size="large"
           variant="contained"
           loading={onRequest}
-          disabled={onRequest}
+          disabled={onRequest || !isDirty || !isValid}
           sx={{ width: "250px", padding: "15px 0px", borderRadius: "12px" }}
         >
           {onRequest ? "Loading..." : "Save"}

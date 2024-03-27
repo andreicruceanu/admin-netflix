@@ -1,6 +1,6 @@
 import axios from "axios";
-import { configsApp } from "../../configs/configsApp.js";
 import queryString from "query-string";
+import { configsApp } from "../../configs/configsApp.js";
 
 const publicClient = axios.create({
   baseURL: configsApp.baseURL,

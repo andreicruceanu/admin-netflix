@@ -37,13 +37,13 @@ const TextareaCostum = ({
   );
 };
 
-const ContainerInput = styled("div")(({}) => ({
+const ContainerInput = styled("div")(() => ({
   display: "flex",
   flexDirection: "column",
   width: "100%",
 }));
 
-const Label = styled("label")(({}) => ({
+const Label = styled("label")(() => ({
   marginBottom: "5px",
   fontSize: "12px",
   fontWeight: 600,
@@ -51,7 +51,7 @@ const Label = styled("label")(({}) => ({
   textAlign: "start",
 }));
 
-const TextArea = styled("textarea")(({}) => ({
+const TextArea = styled("textarea")(() => ({
   background: "#f5f6fa",
   border: "1px solid #d5d5d5",
   borderRadius: "4px",

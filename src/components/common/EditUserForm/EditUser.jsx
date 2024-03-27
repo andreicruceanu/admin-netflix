@@ -1,18 +1,12 @@
-import { Avatar, Box, Stack } from "@mui/material";
-import React, { useState } from "react";
-import InputCustom from "../inputs/InputCustom";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import ButtonCostum from "../Buttons/ButtonCostum";
-import { z } from "zod";
+import { Avatar, Box, Stack } from "@mui/material";
 import { zodResolver } from "@hookform/resolvers/zod";
-import adminApi from "../../../api/modules/admin.api";
 import { showToast } from "../../../utils/functions";
-
-const schemaEditUser = z.object({
-  firstName: z.string().min(1, "FirstName is required").min(3),
-  lastName: z.string().min(1, "LastName is required"),
-  email: z.string().email("Email is invalid !"),
-});
+import { schemaEditAdmin } from "../../../utils/schemaValidation/SchemaEditAdmin";
+import InputCustom from "../inputs/InputCustom";
+import ButtonCostum from "../Buttons/ButtonCostum";
+import adminApi from "../../../api/modules/admin.api";
 
 const EditUser = ({ data, onClose, setAllUsers }) => {
   const [onRequest, setOnRequest] = useState(false);
@@ -20,14 +14,15 @@ const EditUser = ({ data, onClose, setAllUsers }) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty, isValid },
   } = useForm({
     defaultValues: {
       firstName: data.firstName,
       lastName: data.lastName,
       email: data.email,
     },
-    resolver: zodResolver(schemaEditUser),
+    mode: "onTouched",
+    resolver: zodResolver(schemaEditAdmin),
   });
 
   const onSubmit = async (updateUser) => {
@@ -99,7 +94,7 @@ const EditUser = ({ data, onClose, setAllUsers }) => {
           size="large"
           variant="contained"
           loading={onRequest}
-          disabled={onRequest}
+          disabled={onRequest || !isDirty || !isValid}
           sx={{ width: "250px", padding: "15px 0px", borderRadius: "12px" }}
         >
           {onRequest ? "Loading..." : "Save"}

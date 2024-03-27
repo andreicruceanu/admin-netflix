@@ -1,17 +1,17 @@
-import { Alert, Box, Stack, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { Box, Stack, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { formatSeconds, showToast } from "../../utils/functions";
+import { configsApp } from "../../configs/configsApp";
 import Logo from "../../assets/images/logo.png";
 import LoginBg from "../../assets/images/LoginBg.svg";
 import InputCustom from "../../components/common/inputs/InputCustom";
 import ButtonCostum from "../../components/common/Buttons/ButtonCostum";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import CheckEmail from "../../assets/images/check-email.svg";
 import useCountdown from "../../hooks/useCountnown";
-import { formatSeconds, showToast } from "../../utils/functions";
 import authApi from "../../api/modules/auth.api";
-import { configsApp } from "../../configs/configsApp";
 import ContainerAuth from "../../components/common/container/ContainerAuth";
 
 const schema = z.object({

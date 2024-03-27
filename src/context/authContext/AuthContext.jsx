@@ -2,7 +2,7 @@ import { createContext, useReducer, useEffect } from "react";
 import AuthReducer from "./AuthReducer";
 
 const user = JSON.parse(localStorage.getItem("user"));
-const token = localStorage.getItem("jwt_token");
+const token = localStorage.getItem("token");
 const email = localStorage.getItem("email");
 
 const INITIAL_STATE = {

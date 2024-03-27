@@ -1,7 +1,6 @@
-import { Box, useTheme } from "@mui/material";
-import React from "react";
-import Sidebar from "../common/Sidebar/Sidebar";
+import { Box } from "@mui/material";
 import { Outlet } from "react-router-dom";
+import Sidebar from "../common/Sidebar/Sidebar";
 import Topbar from "../common/topbar/Topbar";
 import useCloseSidebar from "../../hooks/useCloseSidebar";
 
@@ -9,7 +8,6 @@ const sidebarWidth = 270;
 
 const MainLayout = () => {
   const { toggleCollapse, isCollapsed } = useCloseSidebar();
-  const theme = useTheme();
 
   return (
     <Box display="flex">

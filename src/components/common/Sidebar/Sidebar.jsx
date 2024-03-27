@@ -1,19 +1,40 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
-import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import { Box, Typography } from "@mui/material";
-import "react-pro-sidebar/dist/css/styles.css";
 import { Link } from "react-router-dom";
+import { Box, Typography } from "@mui/material";
+import { AuthContext } from "../../../context/authContext/AuthContext";
+import { mainMenu } from "../../../configs/menu.config";
+import { logout } from "../../../context/authContext/AuthActions";
+import { CreateMovieContext } from "../../../context/createMovieContext/CreateMovieContext";
+import { logoutForMovie } from "../../../context/createMovieContext/CreateMovieAction";
+import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import "react-pro-sidebar/dist/css/styles.css";
 import Logo from "../../../assets/images/logo.png";
 import DeviderTitle from "./DeviderTitle";
 import SiderBarStyled from "./SiderBarStyled";
-import { mainMenu } from "../../../configs/menu.config";
 
-const Item = ({ title, to, icon, selected, setSelected }) => {
+const Item = ({
+  title,
+  to,
+  icon,
+  selected,
+  setSelected,
+  authDispatch,
+  movieDispatch,
+}) => {
+  function handleLogout() {
+    authDispatch(logout());
+    movieDispatch(logoutForMovie());
+  }
+
   return (
     <MenuItem
       active={selected === title}
-      onClick={() => setSelected(title)}
+      onClick={
+        title.toLowerCase() !== "logout"
+          ? () => setSelected(title)
+          : () => handleLogout()
+      }
       icon={icon}
     >
       <Typography>{title}</Typography>
@@ -24,7 +45,8 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
 
 const Sidebar = ({ sidebarWidth, isCollapsed }) => {
   const [selected, setSelected] = useState("Dashboard");
-
+  const { dispatch: authDispatch } = useContext(AuthContext);
+  const { dispatch: movieDispatch } = useContext(CreateMovieContext);
   return (
     <SiderBarStyled>
       <ProSidebar width={sidebarWidth} collapsed={isCollapsed}>
@@ -60,6 +82,8 @@ const Sidebar = ({ sidebarWidth, isCollapsed }) => {
                   icon={item.icon}
                   selected={selected}
                   setSelected={setSelected}
+                  authDispatch={authDispatch}
+                  movieDispatch={movieDispatch}
                 />
               )
             )}

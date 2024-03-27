@@ -1,28 +1,19 @@
-import {
-  Box,
-  CircularProgress,
-  Stack,
-  TextField,
-  Typography,
-  circularProgressClasses,
-  colors,
-} from "@mui/material";
-import React, { useContext, useEffect, useRef, useState } from "react";
-import Logo from "../../assets/images/logo.png";
-import LoginBg from "../../assets/images/LoginBg.svg";
-import TwoFactorImg from "../../assets/images/two-factor.svg";
-import { AuthContext } from "../../context/authContext/AuthContext";
-import authApi from "../../api/modules/auth.api";
-import { configsApp } from "../../configs/configsApp";
-import useCountdown from "../../hooks/useCountnown";
-import { toast } from "react-toastify";
+import { Box, Stack, TextField, Typography } from "@mui/material";
 import {
   convertOTPtoNumber,
   formatSeconds,
   showToast,
 } from "../../utils/functions";
+import { AuthContext } from "../../context/authContext/AuthContext";
+import { useContext, useEffect, useRef, useState } from "react";
+import { configsApp } from "../../configs/configsApp";
 import { loginSuccess } from "../../context/authContext/AuthActions";
 import { useNavigate } from "react-router-dom";
+import Logo from "../../assets/images/logo.png";
+import LoginBg from "../../assets/images/LoginBg.svg";
+import TwoFactorImg from "../../assets/images/two-factor.svg";
+import authApi from "../../api/modules/auth.api";
+import useCountdown from "../../hooks/useCountnown";
 import ButtonCostum from "../../components/common/Buttons/ButtonCostum";
 import LoadingAnimate from "../../components/common/loading/LoadingAnimate";
 import ContainerAuth from "../../components/common/container/ContainerAuth";
@@ -41,7 +32,7 @@ const TwoFA = () => {
   const { twoFAUser, dispatch } = useContext(AuthContext);
   const { secondsLeft, start } = useCountdown();
 
-  const email = localStorage.getItem("email");
+  const email = twoFAUser?.email;
 
   const navigate = useNavigate();
 
@@ -61,8 +52,9 @@ const TwoFA = () => {
         showToast(err.message, "error");
       }
     };
-
-    fetchMail();
+    if (email) {
+      fetchMail();
+    }
   }, [email]);
 
   useEffect(() => {

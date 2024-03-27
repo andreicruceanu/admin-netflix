@@ -1,17 +1,15 @@
-import { Box, useTheme } from "@mui/material";
-import React from "react";
+import { Box } from "@mui/material";
 
 const SiderBarStyled = ({ children }) => {
-  const theme = useTheme();
   return (
     <Box
       id="Sidebar"
       sx={{
         "& .sidebar-bg-color": {
-          background: `${theme.palette.primary.light} !important`,
+          background: "#fff !important",
         },
         "& .pro-sidebar-inner": {
-          background: `${theme.palette.primary.light} !important`,
+          background: "#fff !important",
         },
         "& .pro-icon-wrapper": {
           backgroundColor: "transparent !important",
@@ -31,18 +29,18 @@ const SiderBarStyled = ({ children }) => {
         },
 
         "& .pro-inner-item:hover": {
-          color: `${theme.palette.primary.dark} !important`,
+          color: "#fff !important",
         },
         "& .pro-menu-item.active": {
-          backgroundColor: `${theme.palette.primary.main}`,
+          backgroundColor: "#4880FF !important",
           position: "relative",
           filter: "drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))",
         },
         "& .pro-menu-item:not(.active):hover": {
-          backgroundColor: `${theme.palette.primary.btnBgHover}`,
+          backgroundColor: "#4880FF !important",
         },
         "& .pro-menu-item.active > .pro-inner-item": {
-          color: `${theme.palette.primary.light} !important`,
+          color: "#fff !important",
         },
         "& .pro-menu-item.active::after": {
           content: '""',
@@ -53,7 +51,7 @@ const SiderBarStyled = ({ children }) => {
           left: "-27px",
           borderTopRightRadius: "8px",
           borderBottomRightRadius: "8px",
-          backgroundColor: `${theme.palette.primary.main}`,
+          backgroundColor: "#4880FF !important",
         },
         "& .pro-menu-item:not(.active):hover::after": {
           content: '""',
@@ -64,7 +62,7 @@ const SiderBarStyled = ({ children }) => {
           left: "-27px",
           borderTopRightRadius: "8px",
           borderBottomRightRadius: "8px",
-          backgroundColor: `${theme.palette.secondary.main}`,
+          backgroundColor: "#4880FF !important",
         },
       }}
     >

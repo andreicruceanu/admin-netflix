@@ -1,64 +1,28 @@
-import { Box, Stack } from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
-import InputCustom from "../../components/common/inputs/InputCustom";
-import { z } from "zod";
+import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
+import { Box, Stack } from "@mui/material";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { showToast } from "../../utils/functions";
+import { CreateMovieContext } from "../../context/createMovieContext/CreateMovieContext";
+import { createMoviePrimaryFacts } from "../../context/createMovieContext/CreateMovieAction";
+import { useMovieStatusAndGenres } from "../../hooks/useMovieStatusAndGenres";
+import { schemaCreateMoviePrimaryFacts } from "../../utils/schemaValidation/SchemaCreateMoviePrimaryFacts";
+import InputCustom from "../../components/common/inputs/InputCustom";
 import TextareaCostum from "../../components/common/inputs/TextareaCostum";
 import SelectCustom from "../../components/common/inputs/SelectCustom";
 import apiCreateMovie from "../../api/modules/createMovie";
-import { showToast } from "../../utils/functions";
 import MultiSelectCustum from "../../components/common/inputs/MultiSelectCustom";
 import ButtonCostum from "../../components/common/Buttons/ButtonCostum";
-import { CreateMovieContext } from "../../context/createMovieContext/CreateMovieContext";
-import { createMoviePrimaryFacts } from "../../context/createMovieContext/CreateMovieAction";
 
 const FormCreateMovie = () => {
-  const [movieStatus, setMovieStatus] = useState([]);
-  const [movieGenres, setMovieGenres] = useState([]);
   const [onRequest, setOnRequest] = useState(false);
-
   const { dispatch } = useContext(CreateMovieContext);
-
-  const schemaCreateMovie = z.object({
-    title: z.string().min(1, "Title is required").min(3),
-    tagline: z.string().min(1, "Tagline is required").min(10),
-    budget: z
-      .string()
-      .min(1, "Budget is required")
-      .transform((value) => parseFloat(value)),
-    revenue: z
-      .string()
-      .min(1, "Revenue is required")
-      .transform((value) => parseFloat(value)),
-    movie_status: z.string().min(1, "Please select movie status"),
-    adult: z
-      .string()
-      .min(1, "Adult movie is required")
-      .refine((value) => {
-        return value === "true" || value === "false";
-      })
-      .transform((value) => {
-        return value === "true";
-      }),
-    runtime: z
-      .string()
-      .min(1, "Runtime is required")
-      .transform((value) => parseFloat(value)),
-    release_date: z
-      .string()
-      .refine((date) => new Date(date).toString() !== "Invalid Date", {
-        message: "A release date is required",
-      })
-      .transform((date) => new Date(date).toISOString().split("T")[0]),
-    overview: z.string().min(1, "Overview is required").min(15),
-    genre_ids: z.string().array().min(3),
-  });
+  const { movieStatus, movieGenres } = useMovieStatusAndGenres();
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty, isValid },
     setValue,
   } = useForm({
     defaultValues: {
@@ -66,30 +30,16 @@ const FormCreateMovie = () => {
       tagline: "",
       budget: "",
       revenue: "",
-      movie_status: "",
+      status: "",
       adult: "false",
       runtime: "",
       release_date: "",
       genre_ids: [],
       overview: "",
     },
-    resolver: zodResolver(schemaCreateMovie),
+    mode: "onTouched",
+    resolver: zodResolver(schemaCreateMoviePrimaryFacts),
   });
-
-  useEffect(() => {
-    const getMovieStatus = async () => {
-      const { response, err } = await apiCreateMovie.getInfo();
-
-      if (response) {
-        setMovieStatus(response.statusMovie);
-        setMovieGenres(response.genresMovie);
-      }
-      if (err) {
-        showToast(err.message, "error");
-      }
-    };
-    getMovieStatus();
-  }, []);
 
   const onSubmit = async (data) => {
     setOnRequest(true);
@@ -156,10 +106,10 @@ const FormCreateMovie = () => {
       <Stack flexDirection="row" gap={5} mb={5}>
         <SelectCustom
           type="select"
-          id="movie_status"
+          id="status"
           label="Movie Status"
           required
-          {...register("movie_status")}
+          {...register("status")}
           errors={errors}
         >
           {movieStatus &&
@@ -233,7 +183,7 @@ const FormCreateMovie = () => {
           size="large"
           variant="contained"
           loading={onRequest}
-          disabled={onRequest}
+          disabled={onRequest || !isDirty || !isValid}
           sx={{ width: "250px", padding: "15px 0px", borderRadius: "12px" }}
         >
           {onRequest ? "Loading..." : "Save"}

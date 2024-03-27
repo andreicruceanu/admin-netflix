@@ -4,6 +4,8 @@ const authEndpoints = {
   createAdmin: "admin/create",
   deleteUser: (userId) => `admin/deleteUser/${userId}`,
   updateUser: (userId) => `admin/updateProfile/${userId}`,
+  changePassword: "admin/changePassword",
+  updateAdmin: "admin/updateAdmin",
 };
 
 const adminApi = {
@@ -49,6 +51,27 @@ const adminApi = {
           lastName,
         }
       );
+      return { response };
+    } catch (err) {
+      return { err };
+    }
+  },
+  changePassword: async ({ newPassword }) => {
+    try {
+      const response = await privateClient.post(authEndpoints.changePassword, {
+        newPassword,
+      });
+      return { response };
+    } catch (err) {
+      return { err };
+    }
+  },
+  updateAdmin: async ({ firstName, lastName }) => {
+    try {
+      const response = await privateClient.patch(authEndpoints.updateAdmin, {
+        firstName,
+        lastName,
+      });
       return { response };
     } catch (err) {
       return { err };
